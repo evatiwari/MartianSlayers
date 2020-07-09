@@ -78,6 +78,7 @@ body{
     font-weight: bold;
     background: none;
     transition: all 0.2s ease-in-out;
+    font-family: 'Bangers', cursive;
   }
   
   button:hover {
@@ -98,7 +99,7 @@ body{
     color: orangered;
   }
   
-  @media only screen and (max-width: 600px) {
+  /*@media only screen and (max-width: 600px) {
   
     h1 {
       font-size: 3rem;
@@ -109,4 +110,4 @@ body{
       margin-top: 1em;
       font-size: 1.3rem;
     }
-  }
+  }*/
