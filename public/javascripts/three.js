@@ -137,6 +137,330 @@ const addPlayerMove4 = e => {
   }
 };
 //Aishwwarya, make changes here, this is entirely random as of now
+const oneDtotwoD_3 = (threeboard) => {
+    var twoD = [];
+  for(var i=0;i<3;i++)
+  {
+      twoD[i] = [threeboard[(i*3)],threeboard[(i*3)+1],threeboard[(i*3)+2]];
+  }
+  return twoD;
+};
+
+const isMoveLeft = (board) => {
+        for(var i=0;i<3;i++)
+        {
+            for(var j=0;j<3;j++)
+            {
+                if(board[i][j]=='_'){
+                    return "true";
+                }
+            }
+        }
+        return "false";
+    };
+
+const checkGameOver = (board,depth) => {
+//console.log(depth);
+        for(var i=0;i<3;i++)
+        {
+                if(board[i][0]==board[i][1] && board[i][0]==board[i][2])
+                {
+                    if(board[i][0]==this.player)
+                    {
+                        return 1000-depth;
+                    }
+                    if(board[i][0]==this.opponent)
+                    {
+                        return -1000+depth;
+                    }
+                }
+        }
+        for(var i=0;i<3;i++)
+        {
+                if(board[0][i]==board[1][i] && board[0][i]==board[2][i])
+                {
+                    if(board[0][i]==this.player)
+                    {
+                        return 1000-depth;
+                    }
+                    if(board[0][i]==this.opponent)
+                    {
+                        return -1000+depth;
+                    }
+                }
+        }
+        if(board[0][0]==board[1][1] && board[0][0]==board[2][2])
+        {
+            if(board[0][0]==this.player)
+            {
+                return 1000-depth;
+            }
+            if(board[0][0]==this.opponent)
+            {
+                return -1000+depth;
+            }
+        }
+        if(board[2][0]==board[1][1] && board[2][0]==board[0][2])
+        {
+            if(board[0][2]==this.player)
+            {
+                return 1000-depth;
+            }
+            if(board[0][2]==this.opponent)
+            {
+                return -1000+depth;
+            }
+        }
+        return 0;
+    };
+
+const evaluate = (board,depth) => {
+        var p= [];
+        var o= [];
+        for(var i=0;i<3;i++)
+        {
+            p[i]=0;
+            for(var j=0;j<3;j++)
+            {
+                if(board[i][j]==this.player)
+                {
+                    p[i]+=1;
+                }
+                if(board[i][j]==this.opponent)
+                {
+                    o[i]+=1;
+                }
+            }
+        }
+        for(var j=0;j<3;j++)
+        {
+            p[j+3]=0;
+            for(var i=0;i<3;i++)
+            {
+                if(board[i][j]==this.player)
+                {
+                    p[j+3]+=1;
+                }
+                if(board[i][j]==this.opponent)
+                {
+                    o[j+3]+=1;
+                }
+            }
+        }
+        p[6]=0;
+        o[6]=0;
+        for(var i=0;i<3;i++)
+        {
+            if(board[i][i]==this.player)
+            {
+                p[6]+=1;
+            }
+            if(board[i][i]==this.opponent)
+            {
+                o[6]+=1;
+            }
+        }
+        p[7]=0;
+        o[7]=0;
+        for(var i=0;i<3;i++)
+        {
+            if(board[i][2-i]==this.player)
+            {
+                p[7]+=1;
+            }
+            if(board[i][2-i]==this.opponent)
+            {
+                o[7]+=1;
+            }
+        }
+        for(var i=0;i<8;i++)
+        {
+            if(p[i]==2 && o[i]==0)
+            {
+                return 100-depth;
+            }
+            if(o[i]==2 && p[i]==0)
+            {
+                return -100+depth;
+            }
+        }
+        for(var i=0;i<8;i++)
+        {
+            if(p[i]==1 && o[i]==0)
+            {
+                return 10-depth;
+            }
+            if(o[i]==1 && p[i]==0)
+            {
+                return -10+depth;
+            }
+        }
+        return 0;
+    };
+
+const minimax = (board,isMax,depth,maxDepth,alpha,beta) => {
+        //board[3]+=1;
+        var score = this.checkGameOver(board,depth);
+        //console.log("score at ");
+        //console.log(score);
+        if(score!=0)
+        {
+            return [score,1];
+        }
+        if(this.isMoveLeft(board)=="false")
+        {
+            //console.log("this is working");
+            return [0,0];
+        }
+//        console.log(isMax);
+      if(depth<=maxDepth){
+        if(isMax=="true")
+        {
+            var bestOpt = 0;
+            var allOpt = []
+            var best= -1000;
+            var val;
+            var br =0;
+            for(var i=0;i<3;i++)
+            {
+                for(var j=0;j<3;j++)
+                {
+                    if (board[i][j]=='_')
+                    {
+                        board[i][j]=this.player;
+                        val = this.minimax(board,"false",depth+1,maxDepth,alpha,beta);
+                        board[i][j]='_';
+                        best = Math.max(best,val[0]);
+                        alpha = Math.max(alpha,best);
+                        allOpt.push(val);
+                        if(beta<alpha)
+                        {
+                            br=1;
+                            break;
+                        }
+                    }
+                }
+                if(br==1)
+                {
+                    break;
+                }
+            }
+            for(let i=0;i<allOpt.length;i++)
+            {
+                if(allOpt[i][0]==best)
+                {
+                    bestOpt+=1;
+                }
+            }
+            return [best,bestOpt];
+        }
+        else
+        {
+            var best= 1000;
+            var val;
+            var allOpt =[];
+            var bestOpt =0;
+            var br=0;
+            for(var i=0;i<3;i++)
+            {
+                for(var j=0;j<3;j++)
+                {
+                    if (board[i][j]=='_')
+                    {
+                        board[i][j]=this.opponent;
+                        val = this.minimax(board,"true",depth+1,maxDepth,alpha,beta);
+                        board[i][j]='_';
+                        best = Math.min(best,val[0]);
+                        beta =  Math.min(best,beta);
+                        //console.log(val);
+                        allOpt.push(val);
+                        if(beta<alpha)
+                        {
+                            br=1;
+                            break;
+                        }
+                    }
+                }
+                if(br==1)
+                {
+                    break;
+                }
+            }
+            for(let i=0;i<allOpt.length;i++)
+            {
+                if(allOpt[i][0]==best)
+                {
+                    bestOpt+=1;
+                }
+            }
+            return [best,bestOpt];
+        }
+    }
+    else {
+
+        ans = this.evaluate(board,depth);
+        return [ans,0];
+    }
+};
+
+const getBestMove = () =>{
+        //board[3]+=1;
+        var board = oneDtotwoD_3(threeboard);
+        var alpha = -10000;
+        var beta = 10000;
+        var maxDepth=3;
+        allOpt =[];
+        bestOpt = [];
+        var bestAns= -1000;
+        var ans = [-1,-1]
+        var moveAns;
+        for(var i=0;i<3;i++)
+        {
+            for(var j=0;j<3;j++)
+            {
+                if (board[i][j]=='_')
+                {
+                    board[i][j]=player;
+                    moveAns = minimax(board,"false",1,maxDepth,alpha,beta);
+                    board[i][j]='_';
+                    //console.log(moveAns);
+                    if (moveAns[0]>bestAns)
+                    {
+                        bestAns=moveAns[0];
+                        ans[0]=i;
+                        ans[1]=j;
+                        //console.log(moveAns);
+                    }
+                    allOpt.push([moveAns,i,j]);
+                    //console.log(moveAns);
+                }
+            }
+        }
+        for(let i=0;i<allOpt.length;i++)
+        {
+            if(allOpt[i][0][0]==bestAns)
+            {
+                bestOpt.push(allOpt[i]);
+            }
+        }
+        var loc=0;
+        for(var i=0;i<bestOpt.length;i++)
+        {
+            if(bestOpt[i][0][1]>bestOpt[loc][0][1])
+            {
+                loc=i;
+            }
+        }
+        //console.log(allOpt);
+        //console.log(bestOpt);
+        var answer = [bestOpt[loc][1],bestOpt[loc][2]];
+        //console.log(answer);
+        var final_ans = answer[0]*3 + answer[1];
+        return final_ans;
+    };
+// Eva
+// call getBestMove from addComputerMove3 func
+// return value is the index in 1D array which is the solution
 const addComputerMove3 = () => {
   if (!board_full) {
     do {
