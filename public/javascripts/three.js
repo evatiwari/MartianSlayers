@@ -118,7 +118,7 @@ else {
 const render_board_3 = () => {
   board_container.innerHTML = ""
   threeboard.forEach((e, i) => {
-    board_container.innerHTML += `<div id="c${i}" class="block" onclick="addPlayerMove3(${i})">${threeboard[i]}</div>`
+    board_container.innerHTML += `<div id="b${i}" class="block" onclick="addPlayerMove3(${i})">${threeboard[i]}</div>`
     if (e == player || e == computer) {
       document.querySelector(`#c${i}`).classList.add("occupied");
     }
@@ -127,7 +127,7 @@ const render_board_3 = () => {
 const render_board_4 = () => {
   board_container.innerHTML = ""
   fourboard.forEach((e, i) => {
-    board_container.innerHTML += `<div id="b${i}" class="block" onclick="addPlayerMove4(${i})">${fourboard[i]}</div>`
+    board_container.innerHTML += `<div id="c${i}" class="block" onclick="addPlayerMove4(${i})">${fourboard[i]}</div>`
     if (e == player || e == computer) {
       document.querySelector(`#b${i}`).classList.add("occupied");
     }
