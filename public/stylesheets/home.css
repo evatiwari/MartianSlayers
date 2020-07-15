@@ -1,20 +1,38 @@
 body{
     font-family: 'Bangers', cursive;
+    background: #eee;
+}
+#winner{
+  height:100px;
+  width:200px;
+  float: right;
+}
+.intro{
+ margin-left: 500px;
+ margin-bottom: 50px;
+}
+.gameset{
+  
+  width:300px;
+  margin-right:200px;
+  margin-left:100px;
+  float: left;
 }
 .container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: #eee;
+    margin-left: 100px;
   }
     
   .board {
     display: grid;
-    width: 300px;
+    width: 500px;
     height: 300px;
+    align-items: center;
+    justify-content: center;
     grid-template-columns: auto auto auto;
+    margin-left: 200px;
+    float: left;
   }
   
   .block {
@@ -46,27 +64,27 @@ body{
     background: #0ff30f;
   }
   
-  #b0,
-  #b1,
-  #b2 {
+  #c0,
+  #c1,
+  #c2 {
     border-top: none;
   }
   
-  #b0,
-  #b3,
-  #b6 {
+  #c0,
+  #c3,
+  #c6 {
     border-left: none;
   }
   
-  #b6,
-  #b7,
-  #b8 {
+  #c6,
+  #c7,
+  #c8 {
     border-bottom: none;
   }
   
-  #b2,
-  #b5,
-  #b8 {
+  #c2,
+  #c5,
+  #c8 {
     border-right: none;
   }
   
@@ -86,6 +104,13 @@ body{
     background: green;
     color: white;
   }
+  .select{
+    cursor: pointer;
+    background: green;
+    color: white;
+
+  }
+  
   
   .playerWin {
     color: green;

@@ -534,14 +534,25 @@ const addComputerMove3 = () => {
   if(level == 1 )
   {
       selected = level_1();
+      document.querySelector("#l2").classList.remove("select");
+       document.querySelector("#l3").classList.remove("select");
+       document.querySelector("#l1").classList.add("select");
   }
   if(level == 2)
   {
        selected = level_2();
+       document.querySelector("#l1").classList.remove("select");
+       document.querySelector("#l3").classList.remove("select");
+       document.querySelector("#l2").classList.add("select");
+       
   }
   if(level == 3)
   {
        selected = level_3();
+       document.querySelector("#l1").classList.remove("select");
+       document.querySelector("#l2").classList.remove("select");
+       document.querySelector("#l3").classList.add("select");
+      
   }
     threeboard[selected] = computer;
     game_loop_3();

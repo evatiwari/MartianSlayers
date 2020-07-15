@@ -12,26 +12,25 @@
     <div class="container">
         <div class="intro">
             <h1>Tic Tac Toe</h1>
-
-
         </div>
+        
         <div class="gameset">
-            <button onclick="oneHumanPlayer()">Vs. Aliens</button>
-            <button onclick="twoHumanPlayer()">Vs. Humans</button><br/>
+            <button id="martian" onclick="oneHumanPlayer()">Vs. Martians</button>
+            <button id="human"onclick="twoHumanPlayer()">Vs. Humans</button><br/>
             <label >Choose who starts first</label><br/>
-            <button onclick="firstHumanMove_3()">Human</button>
-            <button onclick="firstComputerMove_3()">Alien</button><br/>
+            <button id="firstmove" onclick="firstHumanMove_3()">Human</button>
+            <button id="secondmove" onclick="firstComputerMove_3()">Alien</button><br/>
             <label >Choose the difficulty </label><br/>
-            <button onclick="chooseLevel(1)">Easy</button>
-            <button onclick="chooseLevel(2)">Medium</button>
-            <button onclick="chooseLevel(3)">Hard</button>
+            <button id="l1" onclick="chooseLevel(1)">Easy</button>
+            <button id="l2" onclick="chooseLevel(2)">Medium</button>
+            <button id="l3" onclick="chooseLevel(3)">Hard</button>
             <h2>Heuristics</h2>
             <button onclick="reset_board_3()">Reset Board</button>
         </div>
-        <div class="board">
+        
+        <div class="board" >
 
         </div>
-        <br/><br/>
         <div id="winner"></div>
     </div>
     <script type="text/javascript" src="/javascripts/three.js"></script>
