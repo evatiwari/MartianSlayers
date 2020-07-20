@@ -533,17 +533,12 @@ const addComputerMove3 = () => {
   } while (threeboard[selected] != "");*/
   if(level == 1 )
   {
-<<<<<<< HEAD
       selected = level_1();
       
-=======
-      selected = level_1(); 
->>>>>>> 17d4586561cca20713b3fca52e98cae3ca4c7a08
   }
   if(level == 2)
   {
        selected = level_2();
-<<<<<<< HEAD
        
        
   }
@@ -552,13 +547,8 @@ const addComputerMove3 = () => {
        selected = level_3();
        
       
-=======
   }
-  if(level == 3)
-  {
-       selected = level_3(); 
->>>>>>> 17d4586561cca20713b3fca52e98cae3ca4c7a08
-  }
+  
     threeboard[selected] = computer;
     game_loop_3();
   }
