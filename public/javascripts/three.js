@@ -534,24 +534,18 @@ const addComputerMove3 = () => {
   if(level == 1 )
   {
       selected = level_1();
-      document.querySelector("#l2").classList.remove("select");
-       document.querySelector("#l3").classList.remove("select");
-       document.querySelector("#l1").classList.add("select");
+      
   }
   if(level == 2)
   {
        selected = level_2();
-       document.querySelector("#l1").classList.remove("select");
-       document.querySelector("#l3").classList.remove("select");
-       document.querySelector("#l2").classList.add("select");
+       
        
   }
   if(level == 3)
   {
        selected = level_3();
-       document.querySelector("#l1").classList.remove("select");
-       document.querySelector("#l2").classList.remove("select");
-       document.querySelector("#l3").classList.add("select");
+       
       
   }
     threeboard[selected] = computer;
@@ -585,6 +579,21 @@ const level_3 = () => {
 //decide level
 const chooseLevel = (num) =>{
     level = num;
+    if(num==1){
+      document.querySelector("#l2").classList.remove("select");
+      document.querySelector("#l3").classList.remove("select");
+      document.querySelector("#l1").classList.add("select");
+  }
+  if(num==2){
+      document.querySelector("#l1").classList.remove("select");
+      document.querySelector("#l3").classList.remove("select");
+      document.querySelector("#l2").classList.add("select");
+  }
+  if(num==3){
+      document.querySelector("#l1").classList.remove("select");
+      document.querySelector("#l2").classList.remove("select");
+      document.querySelector("#l3").classList.add("select");
+  }
     reset_board_3();
 };
 //reset board
