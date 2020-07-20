@@ -581,22 +581,6 @@ const level_3 = () => {
 const chooseLevel = (num) =>{
     level = num;
     if(num==1){
-<<<<<<< HEAD
-      document.querySelector("#l2").classList.remove("select");
-      document.querySelector("#l3").classList.remove("select");
-      document.querySelector("#l1").classList.add("select");
-  }
-  if(num==2){
-      document.querySelector("#l1").classList.remove("select");
-      document.querySelector("#l3").classList.remove("select");
-      document.querySelector("#l2").classList.add("select");
-  }
-  if(num==3){
-      document.querySelector("#l1").classList.remove("select");
-      document.querySelector("#l2").classList.remove("select");
-      document.querySelector("#l3").classList.add("select");
-  }
-=======
         document.querySelector("#l2").classList.remove("select");
         document.querySelector("#l3").classList.remove("select");
         document.querySelector("#l1").classList.add("select");
@@ -611,7 +595,6 @@ const chooseLevel = (num) =>{
         document.querySelector("#l2").classList.remove("select");
         document.querySelector("#l3").classList.add("select");
     }
->>>>>>> 17d4586561cca20713b3fca52e98cae3ca4c7a08
     reset_board_3();
 };
 //reset board
