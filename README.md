@@ -1,7 +1,5 @@
 # MartianSlayers
-Team repository for Microsoft's Mars Colonization Program for the final project
-
-## Background
+Team repository for Microsoft's Mars Colonization Program for the final project. The project chosen is Tic-Tac-Toe.
 
 ## Getting Started
 
