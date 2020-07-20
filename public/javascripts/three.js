@@ -533,12 +533,17 @@ const addComputerMove3 = () => {
   } while (threeboard[selected] != "");*/
   if(level == 1 )
   {
+<<<<<<< HEAD
       selected = level_1();
       
+=======
+      selected = level_1(); 
+>>>>>>> 17d4586561cca20713b3fca52e98cae3ca4c7a08
   }
   if(level == 2)
   {
        selected = level_2();
+<<<<<<< HEAD
        
        
   }
@@ -547,6 +552,12 @@ const addComputerMove3 = () => {
        selected = level_3();
        
       
+=======
+  }
+  if(level == 3)
+  {
+       selected = level_3(); 
+>>>>>>> 17d4586561cca20713b3fca52e98cae3ca4c7a08
   }
     threeboard[selected] = computer;
     game_loop_3();
@@ -580,6 +591,7 @@ const level_3 = () => {
 const chooseLevel = (num) =>{
     level = num;
     if(num==1){
+<<<<<<< HEAD
       document.querySelector("#l2").classList.remove("select");
       document.querySelector("#l3").classList.remove("select");
       document.querySelector("#l1").classList.add("select");
@@ -594,6 +606,22 @@ const chooseLevel = (num) =>{
       document.querySelector("#l2").classList.remove("select");
       document.querySelector("#l3").classList.add("select");
   }
+=======
+        document.querySelector("#l2").classList.remove("select");
+        document.querySelector("#l3").classList.remove("select");
+        document.querySelector("#l1").classList.add("select");
+    }
+    if(num==2){
+        document.querySelector("#l1").classList.remove("select");
+        document.querySelector("#l3").classList.remove("select");
+        document.querySelector("#l2").classList.add("select");
+    }
+    if(num==3){
+        document.querySelector("#l1").classList.remove("select");
+        document.querySelector("#l2").classList.remove("select");
+        document.querySelector("#l3").classList.add("select");
+    }
+>>>>>>> 17d4586561cca20713b3fca52e98cae3ca4c7a08
     reset_board_3();
 };
 //reset board
