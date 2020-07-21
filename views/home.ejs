@@ -15,16 +15,19 @@
         </div>
         
         <div class="gameset">
-            <button id="martian" onclick="oneHumanPlayer()">Vs. Martians</button>
+            <button id="martian" class="select" onclick="oneHumanPlayer()">Vs. Martians</button>
             <button id="human"onclick="twoHumanPlayer()">Vs. Humans</button><br/>
             <label >Choose who starts first</label><br/>
             <button id="firstmove" onclick="firstHumanMove_3()">Human</button>
             <button id="secondmove" onclick="firstComputerMove_3()">Alien</button><br/>
             <label >Choose the difficulty </label><br/>
-            <button id="l1" onclick="chooseLevel(1)">Easy</button>
+            <button id="l1" class="select" onclick="chooseLevel(1)">Easy</button>
             <button id="l2" onclick="chooseLevel(2)">Medium</button>
             <button id="l3" onclick="chooseLevel(3)">Hard</button>
             <h2>Heuristics</h2>
+            <button id="algo1" class="select" onclick="chooseAlgo(0)">Minimax</button>
+            <button id="algo2" onclick="chooseAlgo(1)">Killer</button>
+            <button id="algo3" onclick="chooseAlgo(2)">R L</button><br/><br/>
             <button onclick="reset_board_3()">Reset Board</button>
         </div>
         
