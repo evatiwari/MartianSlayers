@@ -169,9 +169,7 @@ else {
     }
 }
 };
-
 // render board
-
 const render_board_3 = () => {
   order=3;
   document.querySelector('#threeboard').classList.add("select");
@@ -334,13 +332,9 @@ const checkGameOver = (board,depth) => {
                 if(board[i][0]==board[i][1] && board[i][0]==board[i][2])
                 {
                     if(board[i][0]==computer)
-                    {
                         return 1000-depth;
-                    }
                     if(board[i][0]==player)
-                    {
                         return -1000+depth;
-                    }
                 }
         }
         for(var i=0;i<3;i++)
@@ -348,36 +342,24 @@ const checkGameOver = (board,depth) => {
                 if(board[0][i]==board[1][i] && board[0][i]==board[2][i])
                 {
                     if(board[0][i]==computer)
-                    {
                         return 1000-depth;
-                    }
                     if(board[0][i]==player)
-                    {
                         return -1000+depth;
-                    }
                 }
         }
         if(board[0][0]==board[1][1] && board[0][0]==board[2][2])
         {
             if(board[0][0]==computer)
-            {
                 return 1000-depth;
-            }
             if(board[0][0]==player)
-            {
                 return -1000+depth;
-            }
         }
         if(board[2][0]==board[1][1] && board[2][0]==board[0][2])
         {
             if(board[0][2]==computer)
-            {
                 return 1000-depth;
-            }
             if(board[0][2]==player)
-            {
                 return -1000+depth;
-            }
         }
         return 0;
     };
@@ -391,13 +373,9 @@ const evaluate = (board,depth) => {
             for(var j=0;j<3;j++)
             {
                 if(board[i][j]==player)
-                {
                     p[i]+=1;
-                }
                 if(board[i][j]==computer)
-                {
                     o[i]+=1;
-                }
             }
         }
         for(var j=0;j<3;j++)
@@ -406,13 +384,9 @@ const evaluate = (board,depth) => {
             for(var i=0;i<3;i++)
             {
                 if(board[i][j]==player)
-                {
                     p[j+3]+=1;
-                }
                 if(board[i][j]==computer)
-                {
                     o[j+3]+=1;
-                }
             }
         }
         p[6]=0;
@@ -420,48 +394,32 @@ const evaluate = (board,depth) => {
         for(var i=0;i<3;i++)
         {
             if(board[i][i]==player)
-            {
                 p[6]+=1;
-            }
             if(board[i][i]==computer)
-            {
                 o[6]+=1;
-            }
         }
         p[7]=0;
         o[7]=0;
         for(var i=0;i<3;i++)
         {
             if(board[i][2-i]==player)
-            {
                 p[7]+=1;
-            }
             if(board[i][2-i]==computer)
-            {
                 o[7]+=1;
-            }
         }
         for(var i=0;i<8;i++)
         {
             if(p[i]==2 && o[i]==0)
-            {
                 return 100-depth;
-            }
             if(o[i]==2 && p[i]==0)
-            {
                 return -100+depth;
-            }
         }
         for(var i=0;i<8;i++)
         {
             if(p[i]==1 && o[i]==0)
-            {
                 return 10-depth;
-            }
             if(o[i]==1 && p[i]==0)
-            {
                 return -10+depth;
-            }
         }
         return 0;
     };
@@ -470,13 +428,9 @@ const minimax = (board,isMax,depth,maxDepth,alpha,beta) => {
         tot+=1;
         var score = checkGameOver(board,depth);
         if(score!=0)
-        {
             return [score,1];
-        }
         if(isMoveLeft(board)=="false")
-        {
             return [0,0];
-        }
       if(depth<=maxDepth){
         if(isMax=="true")
         {
@@ -505,16 +459,12 @@ const minimax = (board,isMax,depth,maxDepth,alpha,beta) => {
                     }
                 }
                 if(br==1)
-                {
                     break;
-                }
             }
             for(var i=0;i<allOpt.length;i++)
             {
                 if(allOpt[i][0]==best)
-                {
                     bestOpt+=1;
-                }
             }
             return [best,bestOpt];
         }
@@ -545,22 +495,17 @@ const minimax = (board,isMax,depth,maxDepth,alpha,beta) => {
                     }
                 }
                 if(br==1)
-                {
                     break;
-                }
             }
             for(let i=0;i<allOpt.length;i++)
             {
                 if(allOpt[i][0]==best)
-                {
                     bestOpt+=1;
-                }
             }
             return [best,bestOpt];
         }
     }
     else {
-
         ans = evaluate(board,depth);
         return [ans,0];
     }
@@ -598,17 +543,13 @@ const getBestMove = (maxDepth) =>{
         for(let i=0;i<allOpt.length;i++)
         {
             if(allOpt[i][0][0]==bestAns)
-            {
                 bestOpt.push(allOpt[i]);
-            }
         }
         var loc=0;
         for(var i=1;i<bestOpt.length;i++)
         {
             if(bestOpt[i][0][1]>bestOpt[loc][0][1])
-            {
                 loc=i;
-            }
         }
         var answer = [bestOpt[loc][1],bestOpt[loc][2]];
         console.log(tot);
