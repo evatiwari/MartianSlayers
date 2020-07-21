@@ -1,4 +1,4 @@
-//Aishwwarya, please make changes here
+//player selection
 var player = "X";
 var computer = "O";
 var level = 1;
@@ -658,3 +658,4 @@ const reset_board_4 = () => {
 
 //initial render
 render_board_3();
+
