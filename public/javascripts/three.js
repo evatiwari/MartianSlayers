@@ -151,10 +151,44 @@ const  firstHumanMove_3 = () => {
 //vsHumans setting
 const twoHumanPlayer = () => {
     vsHuman = 1;
+    document.querySelector("#human").classList.add('select');
+    document.querySelector("#martian").classList.remove('select');
     reset_board_3();
 };
 const oneHumanPlayer = () => {
     vsHuman = 0;
+    document.querySelector("#martian").classList.add('select');
+    document.querySelector("#human").classList.remove('select');
+    reset_board_3();
+};
+// choose heuristic
+const chooseAlgo = (x) => {
+    heuristic = x;
+    if(firstPlayerisHuman==1){
+        player='X';
+        computer='O';
+    }
+    else {
+        player='O';
+        computer='X';
+    }
+    if(x==0)
+    {
+        document.querySelector("#algo1").classList.add('select');
+        document.querySelector("#algo2").classList.remove('select');
+        document.querySelector("#algo3").classList.remove('select');
+    }
+    else if(x==1)
+    {
+        document.querySelector("#algo2").classList.add('select');
+        document.querySelector("#algo1").classList.remove('select');
+        document.querySelector("#algo3").classList.remove('select');
+    }
+    else {
+        document.querySelector("#algo3").classList.add('select');
+        document.querySelector("#algo2").classList.remove('select');
+        document.querySelector("#algo1").classList.remove('select');
+    }
     reset_board_3();
 };
 //
