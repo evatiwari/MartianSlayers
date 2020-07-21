@@ -16,8 +16,8 @@
         
         <div class="gameset">
             <label>Game Mode</label><br/>
-            <button class="select" onclick="render_board_3()">3x3</button>
-            <button onclick="render_board_4()">4x4</button><br/>
+            <button class="select" id="threeboard" onclick="render_board_3()">3x3</button>
+            <button id="fourboard" onclick="render_board_4()">4x4</button><br/>
             <label >Choose your opponent</label><br/>
             <button id="martian" class ="select" onclick="oneHumanPlayer()">Vs. Martians</button>
             <button id="human"onclick="twoHumanPlayer()">Vs. Humans</button><br/>
@@ -35,7 +35,7 @@
             <button onclick="reset_board_3()">Reset Board</button>
         </div>
         
-        <div class="board" >
+        <div id="board" class="three" >
 
         </div>
         <div id="winner"></div>

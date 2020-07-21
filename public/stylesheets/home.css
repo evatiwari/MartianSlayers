@@ -24,15 +24,28 @@ body{
     margin-left: 100px;
   }
     
-  .board {
+  #board {
+    
+    margin-left: 200px;
+    float: left;
+  }
+  .three{
     display: grid;
     width: 500px;
     height: 300px;
     align-items: center;
     justify-content: center;
     grid-template-columns: auto auto auto;
-    margin-left: 200px;
-    float: left;
+
+  }
+  .four{
+    display: grid;
+    width:500px;
+    height:400px;
+    align-items:center;
+    justify-content: center;
+    grid-template-columns: auto auto auto auto;
+
   }
   
   .block {
@@ -86,6 +99,31 @@ body{
   #c5,
   #c8 {
     border-right: none;
+  }
+
+  #b0,
+  #b1,
+  #b2,
+  #b3{
+    border-top: none;
+  }
+  #b0,
+  #b4,
+  #b8,
+  #b12{
+    border-left:none;
+  }
+  #b3,
+  #b7,
+  #b11,
+  #b15{
+    border-right: none;
+  }
+  #b12,
+  #b13,
+  #b14,
+  #b15{
+    border-bottom: none;
   }
   
   button {

@@ -13,7 +13,7 @@ let board_full = false;
 let threeboard = ["", "", "", "", "", "", "", "", ""];
 let fourboard = ["", "", "", "","", "", "", "","", "", "", "","", "", "", ""];
 //contains the board class
-const board_container = document.querySelector(".board");
+const board_container = document.querySelector("#board");
 //contains the winner section
 const winner_statement = document.getElementById("winner");
 
@@ -116,6 +116,10 @@ else {
 
 
 const render_board_3 = () => {
+  document.querySelector('#threeboard').classList.add("select");
+  document.querySelector('#fourboard').classList.remove("select");
+  document.querySelector('#board').classList.add("three");
+  document.querySelector('#board').classList.remove("four");
   board_container.innerHTML = ""
   threeboard.forEach((e, i) => {
     board_container.innerHTML += `<div id="c${i}" class="block" onclick="addPlayerMove3(${i})">${threeboard[i]}</div>`
@@ -125,6 +129,10 @@ const render_board_3 = () => {
   });
 };
 const render_board_4 = () => {
+  document.querySelector('#fourboard').classList.add("select");
+  document.querySelector('#threeboard').classList.remove("select");
+  document.querySelector('#board').classList.add("four");
+  document.querySelector('#board').classList.remove("remove");
   board_container.innerHTML = ""
   fourboard.forEach((e, i) => {
     board_container.innerHTML += `<div id="b${i}" class="block" onclick="addPlayerMove4(${i})">${fourboard[i]}</div>`
