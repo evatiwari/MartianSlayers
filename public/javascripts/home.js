@@ -137,6 +137,8 @@ const render_board_4 = () => {
 const firstComputerMove_3 = () => {
     player = "O";
     computer = "X";
+    document.querySelector('#firstmove').classList.remove("select");
+    document.querySelector('#secondmove').classList.add("select");
     reset_board_3();
     selected = Math.floor(Math.random() * 9);
     threeboard[selected] = computer;
@@ -146,6 +148,8 @@ const firstComputerMove_3 = () => {
 const  firstHumanMove_3 = () => {
     player = "X";
     computer = "O";
+    document.querySelector('#firstmove').classList.add("select");
+    document.querySelector('#secondmove').classList.remove("select");
     reset_board_3();
 };
 //vsHumans setting
@@ -161,7 +165,37 @@ const oneHumanPlayer = () => {
     document.querySelector('#human').classList.remove("select");
     reset_board_3();
 };
-//
+//Heuristics
+const chooseAlgo = (x) => {
+  heuristic = x;
+  if(firstPlayerisHuman==1){
+      player='X';
+      computer='O';
+  }
+  else {
+      player='O';
+      computer='X';
+  }
+  if(x==0)
+  {
+      document.querySelector("#algo1").classList.add('select');
+      document.querySelector("#algo2").classList.remove('select');
+      document.querySelector("#algo3").classList.remove('select');
+  }
+  else if(x==1)
+  {
+      document.querySelector("#algo2").classList.add('select');
+      document.querySelector("#algo1").classList.remove('select');
+      document.querySelector("#algo3").classList.remove('select');
+  }
+  else {
+      document.querySelector("#algo3").classList.add('select');
+      document.querySelector("#algo2").classList.remove('select');
+      document.querySelector("#algo1").classList.remove('select');
+  }
+  reset_board_3();
+};
+//game loop
 const game_loop_3 = () => {
   render_board_3();
   check_board_complete();
