@@ -151,10 +151,14 @@ const  firstHumanMove_3 = () => {
 //vsHumans setting
 const twoHumanPlayer = () => {
     vsHuman = 1;
+    document.querySelector('#human').classList.add("select");
+    document.querySelector('#martian').classList.remove("select");
     reset_board_3();
 };
 const oneHumanPlayer = () => {
     vsHuman = 0;
+    document.querySelector('#martian').classList.add("select");
+    document.querySelector('#human').classList.remove("select");
     reset_board_3();
 };
 //
