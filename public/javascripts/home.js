@@ -9,6 +9,7 @@ var player2 = "O";
 var move =1;
 var selected;
 let board_full = false;
+let order=3;
 //the boards, in an array form
 let threeboard = ["", "", "", "", "", "", "", "", ""];
 let fourboard = ["", "", "", "","", "", "", "","", "", "", "","", "", "", ""];
@@ -19,11 +20,21 @@ const winner_statement = document.getElementById("winner");
 
 check_board_complete = () => {
   let flag = true;
+  if(order==3){
   threeboard.forEach(element => {
     if (element != player && element != computer) {
       flag = false;
     }
   });
+}
+  else if(order==4){
+    fourboard.forEach(element => {
+      if (element != player && element != computer){
+        flag = false;
+      }
+
+    });
+  }
   board_full = flag;
 };
 
@@ -40,7 +51,7 @@ const check_line_4 = (a, b, c, d) => {
     fourboard[a] == fourboard[b] &&
     fourboard[b] == fourboard[c] &&
     fourboard[c] == fourboard[d] &&
-    (threeboard[a] == player || threeboard[a] == computer)
+    (fourboard[a] == player || fourboard[a] == computer)
   );
 };
 //checks for winner of 3x3 and returns the winner
@@ -80,9 +91,54 @@ const check_match_3 = () => {
   //returns nothing in case no winner
   return "";
 };
-
-const check_for_winner = () => {
-  let res = check_match_3()
+//checks for winner in 4x4 and returns winner
+const check_match_4 = () => {
+  //checking for complete rows
+for (i = 0; i < 16; i += 4) {
+  if (check_line_4(i, i + 1, i + 2, i + 3)) {
+    document.querySelector(`#b${i}`).classList.add("win");
+    document.querySelector(`#b${i + 1}`).classList.add("win");
+    document.querySelector(`#b${i + 2}`).classList.add("win");
+    document.querySelector(`#b${i + 3}`).classList.add("win");
+    return fourboard[i];
+  }
+}
+//checking for complete columns
+for (i = 0; i < 4; i++) {
+  if (check_line_4(i, i + 4, i + 8, i + 12)) {
+    document.querySelector(`#b${i}`).classList.add("win");
+    document.querySelector(`#b${i + 4}`).classList.add("win");
+    document.querySelector(`#b${i + 8}`).classList.add("win");
+    document.querySelector(`#b${i + 12}`).classList.add("win");
+    return fourboard[i];
+  }
+}
+//checking left diagonal
+if (check_line_4(0,5,10,15)) {
+  document.querySelector("#b0").classList.add("win");
+  document.querySelector("#b5").classList.add("win");
+  document.querySelector("#b10").classList.add("win");
+  document.querySelector("#b15").classList.add("win");
+  return fourboard[0];
+}
+//checking right diagonal
+if (check_line_4(3, 6, 9, 12)) {
+  document.querySelector("#b3").classList.add("win");
+  document.querySelector("#b6").classList.add("win");
+  document.querySelector("#b9").classList.add("win");
+  document.querySelector("#b12").classList.add("win");
+  return fourboard[3];
+}
+//returns nothing in case no winner
+return "";
+};
+//displays winner on screen
+const display_winner = () => {
+  var res;
+  if(order==3)
+  res = check_match_3();
+  else if (order==4)
+  res = check_match_4();
   if(vsHuman==0)
  {
   if (res == player) {
@@ -114,8 +170,10 @@ else {
 }
 };
 
+// render board
 
 const render_board_3 = () => {
+  order=3;
   document.querySelector('#threeboard').classList.add("select");
   document.querySelector('#fourboard').classList.remove("select");
   document.querySelector('#board').classList.add("three");
@@ -129,6 +187,7 @@ const render_board_3 = () => {
   });
 };
 const render_board_4 = () => {
+  order=4;
   document.querySelector('#fourboard').classList.add("select");
   document.querySelector('#threeboard').classList.remove("select");
   document.querySelector('#board').classList.add("four");
@@ -147,7 +206,7 @@ const firstComputerMove_3 = () => {
     computer = "X";
     document.querySelector('#firstmove').classList.remove("select");
     document.querySelector('#secondmove').classList.add("select");
-    reset_board_3();
+    reset_board();
     selected = Math.floor(Math.random() * 9);
     threeboard[selected] = computer;
     game_loop_3();
@@ -158,20 +217,20 @@ const  firstHumanMove_3 = () => {
     computer = "O";
     document.querySelector('#firstmove').classList.add("select");
     document.querySelector('#secondmove').classList.remove("select");
-    reset_board_3();
+    reset_board();
 };
 //vsHumans setting
 const twoHumanPlayer = () => {
     vsHuman = 1;
     document.querySelector('#human').classList.add("select");
     document.querySelector('#martian').classList.remove("select");
-    reset_board_3();
+    reset_board();
 };
 const oneHumanPlayer = () => {
     vsHuman = 0;
     document.querySelector('#martian').classList.add("select");
     document.querySelector('#human').classList.remove("select");
-    reset_board_3();
+    reset_board();
 };
 //Heuristics
 const chooseAlgo = (x) => {
@@ -201,18 +260,18 @@ const chooseAlgo = (x) => {
       document.querySelector("#algo2").classList.remove('select');
       document.querySelector("#algo1").classList.remove('select');
   }
-  reset_board_3();
+  reset_board();
 };
 //game loop
 const game_loop_3 = () => {
   render_board_3();
   check_board_complete();
-  check_for_winner();
+  display_winner();
 };
 const game_loop_4 = () => {
   render_board_4();
   check_board_complete();
-  check_for_winner();
+  display_winner();
 };
 //adding player moves
 const addPlayerMove3 = e => {
@@ -246,7 +305,6 @@ const addPlayerMove4 = e => {
     addComputerMove4();
   }
 };
-//Aishwwarya, make changes here, this is entirely random as of now
 const oneDtotwoD_3 = (threeboard) => {
     var twoD = [];
   for(var i=0;i<3;i++)
@@ -271,7 +329,6 @@ const isMoveLeft = (board) => {
     };
 
 const checkGameOver = (board,depth) => {
-//console.log(depth);
         for(var i=0;i<3;i++)
         {
                 if(board[i][0]==board[i][1] && board[i][0]==board[i][2])
@@ -410,21 +467,16 @@ const evaluate = (board,depth) => {
     };
 
 const minimax = (board,isMax,depth,maxDepth,alpha,beta) => {
-        //board[3]+=1;
         tot+=1;
         var score = checkGameOver(board,depth);
-        //console.log("score at ");
-        //console.log(score);
         if(score!=0)
         {
             return [score,1];
         }
         if(isMoveLeft(board)=="false")
         {
-            //console.log("this is working");
             return [0,0];
         }
-//        console.log(isMax);
       if(depth<=maxDepth){
         if(isMax=="true")
         {
@@ -484,7 +536,6 @@ const minimax = (board,isMax,depth,maxDepth,alpha,beta) => {
                         board[i][j]='';
                         best = Math.min(best,val[0]);
                         beta =  Math.min(best,beta);
-                        //console.log(val);
                         allOpt.push(val);
                         if(beta<=alpha)
                         {
@@ -516,12 +567,10 @@ const minimax = (board,isMax,depth,maxDepth,alpha,beta) => {
 };
 
 const getBestMove = (maxDepth) =>{
-        //board[3]+=1;
         tot+=1;
         var board = oneDtotwoD_3(threeboard);
         var alpha = -10000;
         var beta = 10000;
-        //var maxDepth=11;
         var allOpt =[];
         var bestOpt = [];
         var bestAns= -1000;
@@ -536,16 +585,13 @@ const getBestMove = (maxDepth) =>{
                     board[i][j]=computer;
                     moveAns = minimax(board,"false",1,maxDepth,alpha,beta);
                     board[i][j]='';
-                    //console.log(moveAns);
                     if (moveAns[0]>bestAns)
                     {
                         bestAns=moveAns[0];
                         ans[0]=i;
                         ans[1]=j;
-                        //console.log(moveAns);
                     }
                     allOpt.push([moveAns,i,j]);
-                    //console.log(moveAns);
                 }
             }
         }
@@ -564,41 +610,24 @@ const getBestMove = (maxDepth) =>{
                 loc=i;
             }
         }
-        //console.log(allOpt);
-        //console.log(bestOpt);
         var answer = [bestOpt[loc][1],bestOpt[loc][2]];
-        //console.log(answer);
         console.log(tot);
         var final_ans = (answer[0])*3 + answer[1];
         return final_ans;
     };
 const addComputerMove3 = () => {
   if (!board_full) {
-    /*do {
-      selected = Math.floor(Math.random() * 9);
-  } while (threeboard[selected] != "");*/
   if(level == 1 )
-  {
-      selected = level_1();
-      
-  }
+      selected = level_1(); 
   if(level == 2)
-  {
-       selected = level_2();
-       
-       
-  }
+       selected = level_2();    
   if(level == 3)
-  {
-       selected = level_3();
-       
-      
-  }
-  
+     selected = level_3(); 
     threeboard[selected] = computer;
     game_loop_3();
   }
 };
+//changes needed here
 const addComputerMove4 = () => {
   if (!board_full) {
     do {
@@ -641,10 +670,12 @@ const chooseLevel = (num) =>{
         document.querySelector("#l2").classList.remove("select");
         document.querySelector("#l3").classList.add("select");
     }
-    reset_board_3();
+    reset_board();
 };
+//choose heuristic
 //reset board
-const reset_board_3 = () => {
+const reset_board = () => {
+  if(order==3){
   threeboard = ["", "", "", "", "", "", "", "", ""];
   board_full = false;
   move = 1;
@@ -652,18 +683,17 @@ const reset_board_3 = () => {
   winner.classList.remove("computerWin");
   winner.classList.remove("draw");
   winner.innerText = "";
-  render_board_3();
-};
-const reset_board_4 = () => {
-  fourboard = ["", "", "", "","", "", "", "","", "", "", "","", "", "", ""];
+  render_board_3();}
+  else if(order==4){
+    fourboard = ["", "", "", "","", "", "", "","", "", "", "","", "", "", ""];
   board_full = false;
   winner.classList.remove("playerWin");
   winner.classList.remove("computerWin");
   winner.classList.remove("draw");
   winner.innerText = "";
   render_board_4();
+  }
 };
-
 //initial render
 render_board_3();
 
