@@ -298,9 +298,26 @@ const addPlayerMove3 = e => {
 };
 const addPlayerMove4 = e => {
   if (!board_full && fourboard[e] == "") {
-    fourboard[e] = player;
-    game_loop_4();
-    addComputerMove4();
+    if(vsHuman==0)
+    {
+        fourboard[e] = player;
+        game_loop_4();
+        addComputerMove4();
+    }
+    else
+    {
+        if(move==1)
+        {
+            fourboard[e] = player1;
+            move=2;
+            game_loop_4();
+        }
+        else {
+            fourboard[e] = player2;
+            move=1;
+            game_loop_4();
+        }
+    }
   }
 };
 const oneDtotwoD_3 = (threeboard) => {
@@ -613,7 +630,6 @@ const chooseLevel = (num) =>{
     }
     reset_board();
 };
-//choose heuristic
 //reset board
 const reset_board = () => {
   if(order==3){
