@@ -10,6 +10,10 @@ var move =1;
 var selected;
 let board_full = false;
 let order=3;
+var heuristic =0;
+var firstPlayerisHuman=1;
+var rein_data_1;// Eva, here u need to somehow import the entire object from other file
+var rein_data_2;//same here
 //the boards, in an array form
 let threeboard = ["", "", "", "", "", "", "", "", ""];
 let fourboard = ["", "", "", "","", "", "", "","", "", "", "","", "", "", ""];
@@ -215,6 +219,7 @@ const  firstHumanMove_3 = () => {
     computer = "O";
     document.querySelector('#firstmove').classList.add("select");
     document.querySelector('#secondmove').classList.remove("select");
+    oneHumanPlayer();
     reset_board();
 };
 //vsHumans setting
@@ -258,6 +263,7 @@ const chooseAlgo = (x) => {
       document.querySelector("#algo2").classList.remove('select');
       document.querySelector("#algo1").classList.remove('select');
   }
+  firstHumanMove_3();
   reset_board();
 };
 //game loop
@@ -573,17 +579,90 @@ const getBestMove = (maxDepth) =>{
         var final_ans = (answer[0])*3 + answer[1];
         return final_ans;
     };
+const getHash_3 = () => {
+    var number='';
+    for (var i=0;i<9;i++)
+    {
+        if(threeboard[i]=='')
+        {number = number + '0';}
+        if (threeboard[i]=='X')
+        {number = number + '1';}
+        if (threeboard[i]=='O')
+        {number = number + "-1";}
+    }
+    //console.log(number);
+    return number;
+};
+const rein_move_3 = () => {
+    var avail_pos = ['0','0','0','0','0','0','0','0','0'];
+    var s;
+    var best;
+    for(var i=0;i<9;i++)
+    {
+        if(threeboard[i]=='')
+        {
+            best= i;
+            threeboard[i]=computer;
+            ans = getHash_3();
+            avail_pos[i]=ans;
+            threeboard[i]='';
+        }
+    }
+    for(var i=0;i<9;i++)
+    {
+        if(avail_pos[i]!='0')
+        {
+            try{
+                //console.log(rein_data[avail_pos[i]]);
+                if(computer=='X'){
+                    if(rein_data_1[avail_pos[best]]<=rein_data_1[avail_pos[i]])
+                    {
+                        best = i;
+                    }
+                }
+                else {
+                    if(rein_data_2[avail_pos[best]]<=rein_data_2[avail_pos[i]])
+                    {
+                        best = i;
+                    }
+                }
+            }
+            catch{
+
+            }
+        }
+    }
+    return best;
+};
 const addComputerMove3 = () => {
   if (!board_full) {
-  if(level == 1 )
-      selected = level_1(); 
-  if(level == 2)
-       selected = level_2();    
-  if(level == 3)
-     selected = level_3(); 
+    /*do {
+      selected = Math.floor(Math.random() * 9);
+  } while (threeboard[selected] != "");*/
+  if(heuristic==0){
+      if(level == 1 )
+      {
+          selected = level_1();
+      }
+      if(level == 2)
+      {
+           selected = level_2();
+      }
+      if(level == 3)
+      {
+           selected = level_3();
+      }
     threeboard[selected] = computer;
     game_loop_3();
   }
+  else{
+      console.log("calling this");
+      selected = rein_move_3();
+      threeboard[selected] = computer;
+      game_loop_3();
+  }
+  }
+
 };
 //changes needed here
 const addComputerMove4 = () => {
@@ -612,6 +691,7 @@ const level_3 = () => {
 };
 //decide level
 const chooseLevel = (num) =>{
+    firstHumanMove_3();
     level = num;
     if(num==1){
         document.querySelector("#l2").classList.remove("select");
@@ -629,6 +709,22 @@ const chooseLevel = (num) =>{
         document.querySelector("#l3").classList.add("select");
     }
     reset_board();
+};
+//Eva, this i had to add to remove some errors
+//it is almost same as reset but it was very much needed
+const clear_board_3 =()=>{
+    threeboard = ["", "", "", "", "", "", "", "", ""];
+    board_full = false;
+    player='X';
+    computer='O';
+    document.querySelector("#firstmove").classList.add('select');
+    document.querySelector("#secondmove").classList.remove('select');
+    move = 1;
+    winner.classList.remove("playerWin");
+    winner.classList.remove("computerWin");
+    winner.classList.remove("draw");
+    winner.innerText = "";
+    render_board_3();
 };
 //reset board
 const reset_board = () => {
