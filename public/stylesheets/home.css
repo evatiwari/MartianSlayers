@@ -1,6 +1,7 @@
 body{
     font-family: 'Bangers', cursive;
     background: #eee;
+    font-weight: lighter;
 }
 #winner{
   height:100px;
@@ -135,6 +136,7 @@ body{
     background: none;
     transition: all 0.2s ease-in-out;
     font-family: 'Bangers', cursive;
+    font-weight: lighter;
   }
   
   button:hover {
