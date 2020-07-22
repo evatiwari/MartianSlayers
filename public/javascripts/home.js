@@ -10,6 +10,11 @@ var move =1;
 var selected;
 let board_full = false;
 let order=3;
+var heuristic= 0;
+const rein_data_1;//Eva, here u have to import from policies file
+const rein_data_2;
+const rein_data_3;
+const rein_data_4;
 //the boards, in an array form
 let threeboard = ["", "", "", "", "", "", "", "", ""];
 let fourboard = ["", "", "", "","", "", "", "","", "", "", "","", "", "", ""];
@@ -202,6 +207,7 @@ const firstComputerMove_3 = () => {
     computer = "X";
     document.querySelector('#firstmove').classList.remove("select");
     document.querySelector('#secondmove').classList.add("select");
+    oneHumanPlayer();
     reset_board();
     selected = Math.floor(Math.random() * 9);
     threeboard[selected] = computer;
@@ -213,6 +219,7 @@ const  firstHumanMove_3 = () => {
     computer = "O";
     document.querySelector('#firstmove').classList.add("select");
     document.querySelector('#secondmove').classList.remove("select");
+    oneHumanPlayer();
     reset_board();
 };
 //vsHumans setting
@@ -230,6 +237,7 @@ const oneHumanPlayer = () => {
 };
 //Heuristics
 const chooseAlgo = (x) => {
+  oneHumanPlayer();
   heuristic = x;
   if(firstPlayerisHuman==1){
       player='X';
@@ -571,26 +579,156 @@ const getBestMove = (maxDepth) =>{
         var final_ans = (answer[0])*3 + answer[1];
         return final_ans;
     };
+const getHash_3 = () => {
+    var number='';
+    for (var i=0;i<9;i++)
+    {
+        if(threeboard[i]=='')
+        {number = number + '0';}
+        if (threeboard[i]=='X')
+        {number = number + '1';}
+        if (threeboard[i]=='O')
+        {number = number + "-1";}
+    }
+    //console.log(number);
+    return number;
+};
+const rein_move_3 = () => {
+    var avail_pos = ['0','0','0','0','0','0','0','0','0'];
+    var s;
+    var best;
+    for(var i=0;i<9;i++)
+    {
+        if(threeboard[i]=='')
+        {
+            best= i;
+            threeboard[i]=computer;
+            ans = getHash_3();
+            avail_pos[i]=ans;
+            threeboard[i]='';
+        }
+    }
+    for(var i=0;i<9;i++)
+    {
+        if(avail_pos[i]!='0')
+        {
+            try{
+                //console.log(rein_data[avail_pos[i]]);
+                if(computer=='X'){
+                    if(rein_data_1[avail_pos[best]]<=rein_data_1[avail_pos[i]])
+                    {
+                        best = i;
+                    }
+                }
+                else {
+                    if(rein_data_2[avail_pos[best]]<=rein_data_2[avail_pos[i]])
+                    {
+                        best = i;
+                    }
+                }
+            }
+            catch{
+
+            }
+        }
+    }
+    return best;
+};
+const getHash_4 = () => {
+    var number='';
+    for (var i=0;i<16;i++)
+    {
+        if(fourboard[i]=='')
+        {number = number + '0';}
+        if (fourboard[i]=='X')
+        {number = number + '1';}
+        if (fourboard[i]=='O')
+        {number = number + "-1";}
+    }
+    //console.log(number);
+    return number;
+};
+const rein_move_4 = () => {
+    var avail_pos = ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'];
+    var s;
+    var best;
+    for(var i=0;i<16;i++)
+    {
+        if(fourboard[i]=='')
+        {
+            best= i;
+            fourboard[i]=computer;
+            ans = getHash_4();
+            avail_pos[i]=ans;
+            fourboard[i]='';
+        }
+    }
+    for(var i=0;i<16;i++)
+    {
+        if(avail_pos[i]!='0')
+        {
+            try{
+                //console.log(rein_data[avail_pos[i]]);
+                if(computer=='X'){
+                    if(rein_data_3[avail_pos[best]]<=rein_data_3[avail_pos[i]])
+                    {
+                        best = i;
+                    }
+                }
+                else {
+                    if(rein_data_4[avail_pos[best]]<=rein_data_4[avail_pos[i]])
+                    {
+                        best = i;
+                    }
+                }
+            }
+            catch{
+
+            }
+        }
+    }
+    return best;
+};
 const addComputerMove3 = () => {
   if (!board_full) {
-  if(level == 1 )
-      selected = level_1(); 
-  if(level == 2)
-       selected = level_2();    
-  if(level == 3)
-     selected = level_3(); 
-    threeboard[selected] = computer;
-    game_loop_3();
+    if(heuristic==0){
+        if(level == 1 )
+        {
+            selected = level_1();
+        }
+        if(level == 2)
+        {
+             selected = level_2();
+        }
+        if(level == 3)
+        {
+             selected = level_3();
+        }
+      threeboard[selected] = computer;
+      game_loop_3();
+    }
+    else{
+        selected = rein_move_3();
+        threeboard[selected] = computer;
+        game_loop_3();
+    }
   }
 };
 //changes needed here
 const addComputerMove4 = () => {
   if (!board_full) {
-    do {
+    if(heuristic==0){
+      do {
       selected = Math.floor(Math.random() * 16);
-    } while (fourboard[selected] != "");
-    fourboard[selected] = computer;
-    game_loop_4();
+      } while (fourboard[selected] != "");
+      fourboard[selected] = computer;
+      game_loop_4();
+    }
+    else {
+        selected = rein_move_4();
+        threeboard[selected] = computer;
+        game_loop_4();
+    }
   }
 };
 //Level based
@@ -626,6 +764,7 @@ const chooseLevel = (num) =>{
         document.querySelector("#l2").classList.remove("select");
         document.querySelector("#l3").classList.add("select");
     }
+    oneHumanPlayer();
     reset_board();
 };
 //reset board
@@ -642,6 +781,30 @@ const reset_board = () => {
   else if(order==4){
     fourboard = ["", "", "", "","", "", "", "","", "", "", "","", "", "", ""];
   board_full = false;
+  winner.classList.remove("playerWin");
+  winner.classList.remove("computerWin");
+  winner.classList.remove("draw");
+  winner.innerText = "";
+  render_board_4();
+  }
+};
+const clear_board = () => {
+  if(order==3){
+  threeboard = ["", "", "", "", "", "", "", "", ""];
+  board_full = false;
+  move = 1;
+  document.querySelector("#firstmove").classList.add('select');
+  document.querySelector("#secondmove").classList.remove('select');
+  winner.classList.remove("playerWin");
+  winner.classList.remove("computerWin");
+  winner.classList.remove("draw");
+  winner.innerText = "";
+  render_board_3();}
+  else if(order==4){
+    fourboard = ["", "", "", "","", "", "", "","", "", "", "","", "", "", ""];
+  board_full = false;
+  document.querySelector("#firstmove").classList.add('select');
+  document.querySelector("#secondmove").classList.remove('select');
   winner.classList.remove("playerWin");
   winner.classList.remove("computerWin");
   winner.classList.remove("draw");
