@@ -17,8 +17,8 @@
         
         <div class="gameset">
             <label>Game Mode</label><br/>
-            <button class="select" id="threeboard" onclick="reset_board_3()">3x3</button>
-            <button id="fourboard" onclick="reset_board_4()">4x4</button><br/>
+            <button class="select" id="threeboard" onclick="render_board_3()">3x3</button>
+            <button id="fourboard" onclick="render_board_4()">4x4</button><br/>
             <div>
             <label >Choose your opponent</label><br/>
             <button id="martian" onclick="oneHumanPlayer();createMoreSettings();">Vs. Martians</button>
@@ -28,7 +28,7 @@
             <div id="difficulty"></div>
             <div id="player"></div>
             <div>
-            <button onclick="clear_board()">Reset Board</button>
+            <button onclick="reset_board()">Reset Board</button>
             </div>
         </div>
         

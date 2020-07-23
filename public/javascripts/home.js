@@ -225,7 +225,7 @@ const firstComputerMove_3 = () => {
     document.querySelector('#firstmove').classList.remove("select");
     document.querySelector('#secondmove').classList.add("select");
     oneHumanPlayer();
-    reset_board_3();
+    reset_board();
     selected = Math.floor(Math.random() * 9);
     threeboard[selected] = computer;
     //add here
@@ -241,7 +241,7 @@ const firstComputerMove_3 = () => {
         document.querySelector('#firstmove').classList.remove("select");
         document.querySelector('#secondmove').classList.add("select");
         oneHumanPlayer();
-        reset_board_4();
+        reset_board();
         selected = Math.floor(Math.random() * 16);
         fourboard[selected] = computer;
         if(heuristic==1){
@@ -258,12 +258,8 @@ const  firstHumanMove_3 = () => {
     document.querySelector('#firstmove').classList.add("select");
     document.querySelector('#secondmove').classList.remove("select");
     oneHumanPlayer();
-    if(order==3){
-    reset_board_3();
-  }
-  else{
-    reset_board_4();
-  }
+    reset_board();
+
 };
 //vsHumans setting
 const twoHumanPlayer = () => {
@@ -273,36 +269,23 @@ const twoHumanPlayer = () => {
     player_container.innerHTML="";
     heuristics_container.innerHTML="";
     difficulty_container.innerHTML="";
-    if(order==3){
-      reset_board_3();
-    }
-    else{
-      reset_board_4();
-    }
+      reset_board();
 };
 const oneHumanPlayer = () => {
     vsHuman = 0;
     document.querySelector('#martian').classList.add("select");
     document.querySelector('#human').classList.remove("select");
-    
-    /*if(isMinimax==1){
-      difficulty_container.innerHTML();
-    }*/
-    if(order==3){
-      reset_board_3();
-    }
-    else{
-      reset_board_4();
-    }
+      reset_board();
+
 };
 //fills inner html on the basis of game settings
 const createMoreSettings=()=>{
   heuristics_container.innerHTML+='<label>Heuristics</label></br>';
-    heuristics_container.innerHTML+='<button id="algo1" onclick="chooseAlgo(0)">Minimax</button>';
-    heuristics_container.innerHTML+='<button id="algo2" onclick="chooseAlgo(1)">Killer</button>';
-    heuristics_container.innerHTML+='<button id="algo3" onclick="chooseAlgo(2)">R L</button><br/><br/>';
+    heuristics_container.innerHTML+='<button id="algo1" onclick="chooseAlgo(0)">Minimax</button> ';
+    heuristics_container.innerHTML+='<button id="algo2" onclick="chooseAlgo(1)">Killer</button> ';
+    heuristics_container.innerHTML+='<button id="algo3" onclick="chooseAlgo(2)">R L</button><br/>';
   player_container.innerHTML+='<label >Choose first player</label><br/>';
-    player_container.innerHTML+='<button id="firstmove" onclick="firstHumanMove_3()">Human</button>';
+    player_container.innerHTML+='<button id="firstmove" onclick="firstHumanMove_3()">Human</button> ';
     player_container.innerHTML+='<button id="secondmove" onclick="firstComputerMove_3()">Martian</button><br/>';
     
 
@@ -322,9 +305,9 @@ const chooseAlgo = (x) => {
       document.querySelector("#algo2").classList.remove('select');
       document.querySelector("#algo3").classList.remove('select');
       difficulty_container.innerHTML+='<label >Choose the difficulty </label><br/>';
-      difficulty_container.innerHTML+='<button id="l1" class="select" onclick="chooseLevel(1)">Easy</button>';
-      difficulty_container.innerHTML+='<button id="l2" onclick="chooseLevel(2)">Medium</button>';
-      difficulty_container.innerHTML+='<button id="l3" onclick="chooseLevel(3)">Hard</button>';
+      difficulty_container.innerHTML+='<button id="l1" class="select" onclick="chooseLevel(1)">Easy</button> ';
+      difficulty_container.innerHTML+='<button id="l2" onclick="chooseLevel(2)">Medium</button> ';
+      difficulty_container.innerHTML+='<button id="l3" onclick="chooseLevel(3)">Hard</button> ';
   }
   else if(x==1)
   {
@@ -339,12 +322,8 @@ const chooseAlgo = (x) => {
       document.querySelector("#algo1").classList.remove('select');
       difficulty_container.innerHTML="";
   }
-  if(order==3){
-    reset_board_3();
-  }
-  else{
-    reset_board_4();
-  }
+  
+    reset_board();
 };
 //game loop
 const game_loop_3 = () => {
@@ -1450,20 +1429,15 @@ const chooseLevel = (num) =>{
         document.querySelector("#l3").classList.add("select");
     }
     firstHumanMove_3();
-    if(order==3){
-      //reset_board_3();
-      render_board_3();
-    }
-    else{
-      //reset_board_4();
-      render_board_4();
+      reset_board();
     }
     
-};
+
 
 //Resets board when settings are changed
-const reset_board_3 = () => {
-  
+const reset_board = () => {
+  if(order==3)
+{
   threeboard = ["", "", "", "", "", "", "", "", ""];
   board_full = false;
   turn = 1;
@@ -1483,11 +1457,10 @@ const reset_board_3 = () => {
 	  efficiency = [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]];
 
   }
-  render_board_3();};
-
-  const reset_board_4 = () => {
-  
-    fourboard = ["", "", "", "","", "", "", "","", "", "", "","", "", "", ""];
+  render_board_3();
+}
+  else if(order==4) {
+  fourboard = ["", "", "", "","", "", "", "","", "", "", "","", "", "", ""];
   board_full = false;
   turn = 1;
   winner.classList.remove("playerWin");
@@ -1506,38 +1479,8 @@ const reset_board_3 = () => {
 
   }
   render_board_4();
-  
-};
+  };
+}
 
-//To refresh the Tic Tac Toe board
-const clear_board = () => {
-  if(order==3){
-  threeboard = ["", "", "", "", "", "", "", "", ""];
-  board_full = false;
-  turn = 1;
-  player = 'X';
-  computer = 'O';
-  document.querySelector("#firstmove").classList.add('select');
-  document.querySelector("#secondmove").classList.remove('select');
-  winner.classList.remove("playerWin");
-  winner.classList.remove("computerWin");
-  winner.classList.remove("draw");
-  winner.innerText = "";
-  render_board_3();}
-  else if(order==4){
-    fourboard = ["", "", "", "","", "", "", "","", "", "", "","", "", "", ""];
-  board_full = false;
-  turn = 1;
-  player = 'X';
-  computer = 'O';
-  document.querySelector("#firstmove").classList.add('select');
-  document.querySelector("#secondmove").classList.remove('select');
-  winner.classList.remove("playerWin");
-  winner.classList.remove("computerWin");
-  winner.classList.remove("draw");
-  winner.innerText = "";
-  render_board_4();
-  }
-};
 //initial render
 render_board_3();
