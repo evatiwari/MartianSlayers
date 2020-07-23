@@ -11,7 +11,8 @@ var selected;
 let board_full = false;
 let order=3;
 var heuristic= 0;
-//var firstPlayerisHuman = 1;
+
+//load json files here
 var rein_data_1= (function() {
   var rein_data_1 = null;
   $.ajax({
