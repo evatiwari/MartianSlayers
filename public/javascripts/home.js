@@ -1,70 +1,28 @@
-//player selection
+//Default Settings:
+//Single Player Settings
 var player = "X";
 var computer = "O";
+//Difficulty Settings
 var level = 1;
 let tot = 0;
-var vsHuman  = 0;
-var player1 = "X";
+var vsHuman  = 0; //To play either against computer or human
+//Two human player settings
+var player1 = "X";  
 var player2 = "O";
 var move =1;
+var turn = 1    //To know which player's turn it is 
 var selected;
 let board_full = false;
-let order=3;
-var heuristic= 0;
+let order=3;  //board size
+var heuristic= 0; //Deafault algorithm Minimax
 
-//load json files here
-var rein_data_1= (function() {
-  var rein_data_1 = null;
-  $.ajax({
-    'async': false,
-    'global': false,
-    'url': "/data1.json",
-    'dataType': "json",
-    'success': function(data) {
-      rein_data_1 = data;
-    }
-  });
-  return rein_data_1;
-})();
-var rein_data_2= (function() {
-  var rein_data_2 = null;
-  $.ajax({
-    'async': false,
-    'global': false,
-    'url': "/data2.json",
-    'dataType': "json",
-    'success': function(data) {
-      rein_data_2 = data;
-    }
-  });
-  return rein_data_2;
-})();
-var rein_data_3= (function() {
-  var rein_data_3 = null;
-  $.ajax({
-    'async': false,
-    'global': false,
-    'url': "/data3.json",
-    'dataType': "json",
-    'success': function(data) {
-      json = data;
-    }
-  });
-  return rein_data_3;
-})();
-var rein_data_4= (function() {
-  var rein_data_4 = null;
-  $.ajax({
-    'async': false,
-    'global': false,
-    'url': "/data4.json",
-    'dataType': "json",
-    'success': function(data) {
-      json = data;
-    }
-  });
-  return rein_data_4;
-})();
+//Loading Reinforcement Learning data
+var rein_data_1 = move1();
+var rein_data_2 = move2();
+var rein_data_3 = move3();
+var rein_data_4 = move4();
+
+
 //the boards, in an array form
 let threeboard = ["", "", "", "", "", "", "", "", ""];
 let fourboard = ["", "", "", "","", "", "", "","", "", "", "","", "", "", ""];
@@ -259,9 +217,14 @@ const firstComputerMove_3 = () => {
     document.querySelector('#firstmove').classList.remove("select");
     document.querySelector('#secondmove').classList.add("select");
     oneHumanPlayer();
-    reset_board();
+    reset_board_3();
     selected = Math.floor(Math.random() * 9);
     threeboard[selected] = computer;
+    //add here
+    if(heuristic==1){
+      computer_board = 1<<selected;
+      depth+=1;
+    }
     game_loop_3();
     }
     else {
@@ -270,9 +233,13 @@ const firstComputerMove_3 = () => {
         document.querySelector('#firstmove').classList.remove("select");
         document.querySelector('#secondmove').classList.add("select");
         oneHumanPlayer();
-        reset_board();
+        reset_board_4();
         selected = Math.floor(Math.random() * 16);
         fourboard[selected] = computer;
+        if(heuristic==1){
+          computer_board = 1<<selected;
+          depth+=1;
+        }
         game_loop_4();
         }
     };
@@ -283,20 +250,35 @@ const  firstHumanMove_3 = () => {
     document.querySelector('#firstmove').classList.add("select");
     document.querySelector('#secondmove').classList.remove("select");
     oneHumanPlayer();
-    reset_board();
+    if(order==3){
+    reset_board_3();
+  }
+  else{
+    reset_board_4();
+  }
 };
 //vsHumans setting
 const twoHumanPlayer = () => {
     vsHuman = 1;
     document.querySelector('#human').classList.add("select");
     document.querySelector('#martian').classList.remove("select");
-    reset_board();
+    if(order==3){
+      reset_board_3();
+    }
+    else{
+      reset_board_4();
+    }
 };
 const oneHumanPlayer = () => {
     vsHuman = 0;
     document.querySelector('#martian').classList.add("select");
     document.querySelector('#human').classList.remove("select");
-    reset_board();
+    if(order==3){
+      reset_board_3();
+    }
+    else{
+      reset_board_4();
+    }
 };
 //Heuristics
 const chooseAlgo = (x) => {
@@ -323,7 +305,12 @@ const chooseAlgo = (x) => {
       document.querySelector("#algo2").classList.remove('select');
       document.querySelector("#algo1").classList.remove('select');
   }
-  reset_board();
+  if(order==3){
+    reset_board_3();
+  }
+  else{
+    reset_board_4();
+  }
 };
 //game loop
 const game_loop_3 = () => {
@@ -341,21 +328,28 @@ const addPlayerMove3 = e => {
   if (!board_full && threeboard[e] == "") {
     if(vsHuman==0)
     {
-        threeboard[e] = player;
+      //add here 
+      threeboard[e] = player;
+      if(heuristic == 1){
+            mask = 1<<e;
+            human_board = human_board | mask;
+            depth+=1;
+        }
+        
         game_loop_3();
         addComputerMove3();
     }
     else
     {
-        if(move==1)
+        if(turn==1)
         {
             threeboard[e] = player1;
-            move=2;
+            turn=2;
             game_loop_3();
         }
         else {
             threeboard[e] = player2;
-            move=1;
+            turn=1;
             game_loop_3();
         }
     }
@@ -366,25 +360,39 @@ const addPlayerMove4 = e => {
     if(vsHuman==0)
     {
         fourboard[e] = player;
+        if(heuristic == 1){
+          mask = 1<<e;
+          human_board = human_board | mask;
+          depth+=1;
+      }
         game_loop_4();
         addComputerMove4();
+
     }
     else
     {
-        if(move==1)
+        if(turn==1)
         {
             fourboard[e] = player1;
-            move=2;
+            turn=2;
             game_loop_4();
         }
         else {
             fourboard[e] = player2;
-            move=1;
+            turn=1;
             game_loop_4();
         }
     }
   }
 };
+
+/*
+MINIMAX
+->alpha beta pruning is also implemented
+->board sizes 3 and 4
+*/
+
+//Takes 1*9 array as input and returns 3*3 array
 const oneDtotwoD_3 = (threeboard) => {
     var twoD = [];
   for(var i=0;i<3;i++)
@@ -394,7 +402,18 @@ const oneDtotwoD_3 = (threeboard) => {
   console.log(twoD);
   return twoD;
 };
+//Takes 1*16 array as input and returns 4*4 array
+const oneDtotwoD_4 = (fourboard) => {
+  var twoD = [];
+for(var i=0;i<4;i++)
+{
+    twoD[i] = [fourboard[(i*4)],fourboard[(i*4)+1],fourboard[(i*4)+2],fourboard[(i*4)+3]];
+}
+console.log(twoD);
+return twoD;
+};
 
+//returns false if board is full else returns false
 const isMoveLeft = (board) => {
         for(var i=0;i<3;i++)
         {
@@ -408,6 +427,19 @@ const isMoveLeft = (board) => {
         return "false";
     };
 
+const isMoveLeft_4 = (board) => {
+      for(var i=0;i<4;i++)
+      {
+          for(var j=0;j<4;j++)
+          {
+              if(board[i][j]==''){
+                  return "true";
+              }
+          }
+      }
+      return "false";
+  };
+//returns 0 if game is not terminated or if it is a draw
 const checkGameOver = (board,depth) => {
         for(var i=0;i<3;i++)
         {
@@ -446,6 +478,44 @@ const checkGameOver = (board,depth) => {
         return 0;
     };
 
+const checkGameOver_4 = (board,depth) => {
+      for(var i=0;i<4;i++)
+      {
+              if(board[i][0]==board[i][1] && board[i][0]==board[i][2] && board[i][0]==board[i][3])
+              {
+                  if(board[i][0]==computer)
+                      return 10000-depth;
+                  if(board[i][0]==player)
+                      return -10000+depth;
+              }
+      }
+      for(var i=0;i<4;i++)
+      {
+              if(board[0][i]==board[1][i] && board[0][i]==board[2][i] && board[0][i]==board[3][i])
+              {
+                  if(board[0][i]==computer)
+                      return 10000-depth;
+                  if(board[0][i]==player)
+                      return -10000+depth;
+              }
+      }
+      if(board[0][0]==board[1][1] && board[0][0]==board[2][2] && board[0][0]==board[3][3] )
+      {
+          if(board[0][0]==computer)
+              return 10000-depth;
+          if(board[0][0]==player)
+              return -10000+depth;
+      }
+      if(board[3][0]==board[2][1] && board[3][0]==board[1][2] && board[3][0]==board[0][3] )
+      {
+          if(board[0][3]==computer)
+              return 10000-depth;
+          if(board[0][3]==player)
+              return -10000+depth;
+      }
+      return 0;
+  };
+//returns a value indicating how favourable a state is
 const evaluate = (board,depth) => {
         var p= [];
         var o= [];
@@ -506,6 +576,75 @@ const evaluate = (board,depth) => {
         return 0;
     };
 
+const evaluate_4 = (board,depth) => {
+      var p= [];
+      var o= [];
+      for(var i=0;i<4;i++)
+      {
+          p[i]=0;
+          o[i]=0;
+          for(var j=0;j<4;j++)
+          {
+              if(board[i][j]==player)
+                  p[i]+=1;
+              if(board[i][j]==computer)
+                  o[i]+=1;
+          }
+      }
+      for(var j=0;j<4;j++)
+      {
+          p[j+4]=0;
+          o[j+4]=0;
+          for(var i=0;i<4;i++)
+          {
+              if(board[i][j]==player)
+                  p[j+4]+=1;
+              if(board[i][j]==computer)
+                  o[j+4]+=1;
+          }
+      }
+      p[8]=0;
+      o[8]=0;
+      for(var i=0;i<4;i++)
+      {
+          if(board[i][i]==player)
+              p[8]+=1;
+          if(board[i][i]==computer)
+              o[8]+=1;
+      }
+      p[9]=0;
+      o[9]=0;
+      for(var i=0;i<4;i++)
+      {
+          if(board[i][3-i]==player)
+              p[9]+=1;
+          if(board[i][3-i]==computer)
+              o[9]+=1;
+      }
+      for(var i=0;i<10;i++)
+      {
+          if(p[i]==3 && o[i]==0)
+              return 1000-depth;
+          if(o[i]==3 && p[i]==0)
+              return -1000+depth;
+      }
+      for(var i=0;i<10;i++)
+      {
+          if(p[i]==2 && o[i]==0)
+              return 100-depth;
+          if(o[i]==2 && p[i]==0)
+              return -100+depth;
+      }
+      for(var i=0;i<10;i++)
+      {
+          if(p[i]==1 && o[i]==0)
+              return 10-depth;
+          if(o[i]==1 && p[i]==0)
+              return -10+depth;
+      }
+      return 0;
+  };
+//minimax function with alpha beta pruning
 const minimax = (board,isMax,depth,maxDepth,alpha,beta) => {
         tot+=1;
         var score = checkGameOver(board,depth);
@@ -593,6 +732,93 @@ const minimax = (board,isMax,depth,maxDepth,alpha,beta) => {
     }
 };
 
+const minimax_4 = (board,isMax,depth,maxDepth,alpha,beta) => {
+  tot+=1;
+  var score = checkGameOver_4(board,depth);
+  if(score!=0)
+      return [score,1];
+  if(isMoveLeft_4(board)=="false")
+      return [0,0];
+if(depth<=maxDepth){
+  if(isMax=="true")
+  {
+      var bestOpt = 0;
+      var allOpt = []
+      var best= -10000;
+      var val;
+      var br =0;
+      for(var i=0;i<4;i++)
+      {
+          for(var j=0;j<4;j++)
+          {
+              if (board[i][j]=='')
+              {
+                  board[i][j]=computer;
+                  val = minimax_4(board,"false",depth+1,maxDepth,alpha,beta);
+                  board[i][j]='';
+                  best = Math.max(best,val[0]);
+                  alpha = Math.max(alpha,best);
+                  allOpt.push(val);
+                  if(beta<=alpha)
+                  {
+                      br=1;
+                      break;
+                  }
+              }
+          }
+          if(br==1)
+              break;
+      }
+      for(var i=0;i<allOpt.length;i++)
+      {
+          if(allOpt[i][0]==best)
+              bestOpt+=1;
+      }
+      return [best,bestOpt];
+  }
+  else
+  {
+      var best= 10000;
+      var val;
+      var allOpt =[];
+      var bestOpt =0;
+      var br=0;
+      for(var i=0;i<4;i++)
+      {
+          for(var j=0;j<4;j++)
+          {
+              if (board[i][j]=='')
+              {
+                  board[i][j]=player;
+                  val = minimax_4(board,"true",depth+1,maxDepth,alpha,beta);
+                  board[i][j]='';
+                  best = Math.min(best,val[0]);
+                  beta =  Math.min(best,beta);
+                  allOpt.push(val);
+                  if(beta<=alpha)
+                  {
+                      br=1;
+                      break;
+                  }
+              }
+          }
+          if(br==1)
+              break;
+      }
+      for(let i=0;i<allOpt.length;i++)
+      {
+          if(allOpt[i][0]==best)
+              bestOpt+=1;
+      }
+      return [best,bestOpt];
+  }
+}
+else {
+  ans = evaluate_4(board,depth);
+  return [ans,0];
+}
+};
+//returns optimal move (depends on the level of difficulty)
 const getBestMove = (maxDepth) =>{
         tot+=1;
         var board = oneDtotwoD_3(threeboard);
@@ -638,6 +864,301 @@ const getBestMove = (maxDepth) =>{
         var final_ans = (answer[0])*3 + answer[1];
         return final_ans;
     };
+
+
+const getBestMove_4 = (maxDepth) =>{
+      tot+=1;
+      var board = oneDtotwoD_4(fourboard);
+      var alpha = -100000;
+      var beta = 100000;
+      var allOpt =[];
+      var bestOpt = [];
+      var bestAns= -10000;
+      var ans = [-1,-1]
+      var moveAns;
+      for(var i=0;i<4;i++)
+      {
+          for(var j=0;j<4;j++)
+          {
+              if (board[i][j]=='')
+              {
+                  board[i][j]=computer;
+                  moveAns = minimax_4(board,"false",1,maxDepth,alpha,beta);
+                  board[i][j]='';
+                  if (moveAns[0]>bestAns)
+                  {
+                      bestAns=moveAns[0];
+                      ans[0]=i;
+                      ans[1]=j;
+                  }
+                  allOpt.push([moveAns,i,j]);
+              }
+          }
+      }
+      for(let i=0;i<allOpt.length;i++)
+      {
+          if(allOpt[i][0][0]==bestAns)
+              bestOpt.push(allOpt[i]);
+      }
+      var loc=0;
+      for(var i=1;i<bestOpt.length;i++)
+      {
+          if(bestOpt[i][0][1]>bestOpt[loc][0][1])
+              loc=i;
+      }
+      var answer = [bestOpt[loc][1],bestOpt[loc][2]];
+      console.log(tot);
+      var final_ans = (answer[0])*4 + answer[1];
+      return final_ans;
+  };
+//Minimax with killer heuristic
+const evaluate_k = (human_board, computer_board, depth) =>{
+	for(var m=0;m<n;m++){
+		var p=0;
+		var o=0;
+		var k;
+		//n-m in a row
+		for(var i=0;i<n;i++){
+			for(var j=0;j<n;j++){
+				k=((n*i)+j);
+				mask=1<<k;
+				if((computer_board&mask)==mask){
+					p=p+1;
+				}
+				if((human_board&mask)==mask){
+					o=o+1;
+				}
+			}
+			if((p==(n-m))&&(o==0)){
+				return (Math.pow(10,n-m))-depth;
+			}
+			if((o==(n-m))&&(p==0)){
+				return ((-1)*(Math.pow(10,n-m)))+depth;
+			}
+			p=0;
+			o=0;
+		}
+		//n-m in a column
+		for(var j=0;j<n;j++){
+			for(var i=0;i<n;i++){
+				k=((n*i)+j);
+				mask=1<<k;
+				if((computer_board&mask)==mask){
+					p=p+1;
+				}
+				if((human_board&mask)==mask){
+					o=o+1;
+				}
+			}
+			if((p==(n-m))&&(o==0)){
+				return (Math.pow(10,n-m))-depth;
+			}
+			if((o==(n-m))&&(p==0)){
+				return ((-1)*(Math.pow(10,n-m)))+depth;
+			}
+			p=0;
+			o=0;
+		}
+		//n-m along diagonal
+		for(var i=0;i<n;i++){
+			k=n*i+i;
+			mask=1<<k;
+			if((computer_board&mask)==mask){
+				p=p+1;
+			}
+			if((human_board&mask)==mask){
+				o=o+1;
+			}
+		}
+		if((p==(n-m))&&(o==0)){
+			return (Math.pow(10,n-m))-depth;
+		}
+		if((o==(n-m))&&(p==0)){
+			return ((-1)*(Math.pow(10,n-m)))+depth;
+		}
+		p=0;
+		o=0;
+		//n-m along other diagonal
+		for(var i=0;i<n;i++){
+			k=(n*i)+((n-1)-i);
+			mask=1<<k;
+			if((computer_board&mask)==mask){
+				p=p+1;
+			}
+			if((human_board&mask)==mask){
+				o=o+1;
+			}
+		}
+		if((p==(n-m))&&(o==0)){
+			return (Math.pow(10,n-m))-depth;
+		}
+		if((o==(n-m))&&(p==0)){
+			return ((-1)*(Math.pow(10,n-m)))+depth;
+		}
+	}
+	return 0;
+};
+
+const checkGameOver_k = (human_board,computer_board,depth)=>{
+	if(n==3){
+		win_conditions=[0b000000111,0b000111000,0b111000000,0b001001001,0b010010010,0b100100100,0b100010001,0b001010100]
+	}
+	else if(n==4){
+		win_conditions=[0b0000000000001111,0b0000000011110000,0b0000111100000000,0b1111000000000000,0b0001000100010001,0b0010001000100010,0b0100010001000100,0b1000100010001000,0b1000010000100001,0b0001001001001000]
+	}
+	for(var i=0;i<win_conditions.length;i++){
+		mask=win_conditions[i];
+		if((human_board&mask)==mask){
+			return ((-1)*Math.pow(10,n))+depth;
+		}
+		if((computer_board&mask)==mask){
+			return Math.pow(10,n)-depth;
+		}
+	}
+	return 0;
+};
+
+const isMoveLeft_k = (human_board,computer_board)=>{
+	if(n==3){
+		if((human_board|computer_board)==0b111111111){
+			return 0;
+		}
+	}
+	if(n==4){
+		if((human_board|computer_board)==0b1111111111111111){
+			return 0;
+		}
+	}
+	return 1;
+};
+
+const minimax_k = (human_board,computer_board,isMax,alpha,beta,depth,maxDepth) =>{
+	var val,best,temporary_board,move;
+	var score = checkGameOver_k(human_board,computer_board,depth);
+	if(score!=0){
+		return score;
+	}
+	if((isMoveLeft_k(human_board,computer_board))==1){
+		if(depth<=maxDepth){
+			var allPossibleMoves=[];
+			if(isMax==1){
+				best=((-1)*Math.pow(10,n));
+				for(var i=0;i<(n*n);i++){
+					move=1<<i;
+					if(((human_board&move)!=move) && ((computer_board&move)!=move)){
+						if(move==killerMoves[depth-1][0]){
+							efficiency[depth-1][0]+=1;
+							allPossibleMoves.unshift(move);
+						}
+						else if(move==killerMoves[depth-1][1]){
+							efficiency[depth-1][1]+=1;
+							allPossibleMoves.unshift(move);
+						}
+						else{
+							allPossibleMoves.push(move);
+						}
+						if((efficiency[depth-1][0]!=0) && (efficiency[depth-1][1]!=0)){
+							if(efficiency[depth-1][0]<efficiency[depth-1][1]){
+								var t=killerMoves[depth-1][0];
+								killerMoves[depth-1][0]=killerMoves[depth-1][1];
+								killerMoves[depth-1][1]=t;
+								t=efficiency[depth-1][0];
+								efficiency[depth-1][0]=efficiency[depth-1][1];
+								efficiency[depth-1][1]=t;
+							}
+						}
+					}
+				}
+				
+				for(var i=0;i<allPossibleMoves.length;i++){
+					move=allPossibleMoves[i];
+					temporary_board = (computer_board|move);
+					val=minimax_k(human_board,temporary_board,0,alpha,beta,depth+1,maxDepth);
+					best=Math.max(best,val);
+					alpha=Math.max(alpha,best);
+					if(alpha>=beta){
+						for(var j=0;j<2;j++){
+							if(move==killerMoves[depth-1][i]){
+								break;
+							}
+							if(j==1){
+								if(killerMoves[depth-1][0]==0){
+									killerMoves[depth-1][0]=move;
+									efficiency[depth-1][0]=1;
+								}
+								else if(killerMoves[depth-1][1]==0){
+									killerMoves[depth-1][1]=move;
+									efficiency[depth-1][1]=1;
+								}
+								else{
+									killerMoves[depth-1][1]=killerMoves[depth-1][0];
+									killerMoves[depth-1][0]=move;
+									efficiency[depth-1][1]=efficiency[depth-1][0];
+									efficiency[depth-1][0]=1;
+								}
+							}
+						}
+						return best;
+					}
+				}
+				return best;
+			}
+			else if(isMax==0){
+				best=Math.pow(10,n);
+				for(var i=0;i<(n*n);i++){
+					move=1<<i;
+					if(((human_board&move)!=move)&&((computer_board&move)!=move)){
+						allPossibleMoves.push(move);
+					}
+				}
+				
+				for(var i=0;i<allPossibleMoves.length;i++){
+					move=allPossibleMoves[i];
+					temporary_board=(human_board|move);
+					val=minimax_k(temporary_board,computer_board,1,alpha,beta,depth+1,maxDepth);
+					best=Math.min(best,val);
+					beta=Math.min(beta,best);
+					if(alpha>=beta){
+						return best;
+					}
+				}
+				return best;
+			}
+		}
+		else if(depth>maxDepth){
+			val=evaluate_k(human_board,computer_board,depth);
+			return val;
+		}
+	}
+	return 0;
+};
+
+const getBestMove_k = (human_board,computer_board,depth,level) =>{
+  console.log("In killer");
+	var maxDepth=depth+level;
+	var alpha=((-1)*Math.pow(10,n));
+	var beta= Math.pow(10,n);
+	var bestMaskIndex=0;
+	var bestAns=((-1)*Math.pow(10,n));
+	var moveMask=0;
+	var moveAns=0;
+	for(var i=0;i<(n*n);i++){
+		moveMask=1<<i;
+		if(((human_board&moveMask)==0)&&((computer_board&moveMask)==0)){
+			temporary_board=(computer_board|moveMask);
+			moveAns=minimax_k(human_board,temporary_board,0,alpha,beta,depth+1,maxDepth);
+			if(bestAns<moveAns){
+				bestAns=moveAns;
+				bestMaskIndex=i;
+			}
+		}
+	}
+	return bestMaskIndex;
+};
+
+/*REINFORCEMENT LEARNING*/
+//board size = 3
+//returns hash value of given board state in the form of a string
 const getHash_3 = () => {
     var number='';
     for (var i=0;i<9;i++)
@@ -652,6 +1173,7 @@ const getHash_3 = () => {
     //console.log(number);
     return number;
 };
+//returns best possible next move based on previously trained model
 const rein_move_3 = () => {
     var avail_pos = ['0','0','0','0','0','0','0','0','0'];
     var s;
@@ -674,12 +1196,14 @@ const rein_move_3 = () => {
             try{
                 //console.log(rein_data[avail_pos[i]]);
                 if(computer=='X'){
+                    console.log("Fisrt player computer");
                     if(rein_data_1[avail_pos[best]]<=rein_data_1[avail_pos[i]])
                     {
                         best = i;
                     }
                 }
                 else {
+                  console.log("Fisrt player human");
                     if(rein_data_2[avail_pos[best]]<=rein_data_2[avail_pos[i]])
                     {
                         best = i;
@@ -693,6 +1217,9 @@ const rein_move_3 = () => {
     }
     return best;
 };
+
+//board size = 4
+//returns hash value of given board state in the form of a string
 const getHash_4 = () => {
     var number='';
     for (var i=0;i<16;i++)
@@ -707,6 +1234,7 @@ const getHash_4 = () => {
     //console.log(number);
     return number;
 };
+//returns best possible next move based on previously trained model
 const rein_move_4 = () => {
     var avail_pos = ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'];
     var s;
@@ -750,6 +1278,8 @@ const rein_move_4 = () => {
     }
     return best;
 };
+
+//adds move of computer when board size = 3
 const addComputerMove3 = () => {
   if (!board_full) {
     if(heuristic==0){
@@ -768,6 +1298,14 @@ const addComputerMove3 = () => {
       threeboard[selected] = computer;
       game_loop_3();
     }
+    else if (heuristic == 1){
+      selected = getBestMove_k(human_board,computer_board,depth,9);
+      computer_board = computer_board | (1<<selected);
+      depth+=1;
+      threeboard[selected] = computer;
+      game_loop_3();
+
+    }
     else{
         selected = rein_move_3();
         threeboard[selected] = computer;
@@ -775,24 +1313,75 @@ const addComputerMove3 = () => {
     }
   }
 };
+
 //changes needed here
+//adds move of computer when board size = 4
+
+//driver
+const toReduceTime = () => {
+  var filled =0; 
+  for(var i=0;i<16;i++)
+  {
+      if(fourboard[i]!='')
+      {
+          filled += 1;
+      }
+  }
+  return filled;
+};
 const addComputerMove4 = () => {
-  if (!board_full) {
-    if(heuristic==0){
-      do {
+if (!board_full) {
+  if(heuristic==0){
+      if(level==1){
+    do {
+    selected = Math.floor(Math.random() * 16);
+    } while (fourboard[selected] != "");
+}
+if(level==2)
+{
+  if(toReduceTime()>=4){
+    selected = getBestMove_4(1);
+  }  
+  else{
+    do {
       selected = Math.floor(Math.random() * 16);
       } while (fourboard[selected] != "");
+  }
+  // selected = getBestMove_4(1);
+}
+if(level==3)
+{
+  if(toReduceTime()>=4){
+    selected = getBestMove_4(10);
+  }  
+  else{
+    do {
+      selected = Math.floor(Math.random() * 16);
+      } while (fourboard[selected] != "");
+  } 
+  // selected = getBestMove_4(10);
+}
+    fourboard[selected] = computer;
+    game_loop_4();
+  }
+  else if (heuristic == 1){
+    selected = getBestMove_k(human_board,computer_board,depth,16);
+    computer_board = computer_board | (1<<selected);
+    depth+=1;
+    fourboard[selected] = computer;
+    game_loop_4();
+
+  }
+  else {
+      selected = rein_move_4();
       fourboard[selected] = computer;
       game_loop_4();
-    }
-    else {
-        selected = rein_move_4();
-        fourboard[selected] = computer;
-        game_loop_4();
-    }
   }
+}
 };
-//Level based
+
+
+//Calls minimax function based on the level of difficulty
 const level_1 = () => {
     do {
       selected = Math.floor(Math.random() * 9);
@@ -807,7 +1396,8 @@ const level_3 = () => {
         selected = getBestMove(10);
         return selected;
 };
-//decide level
+
+//decide difficulty
 const chooseLevel = (num) =>{
     level = num;
     if(num==1){
@@ -826,34 +1416,68 @@ const chooseLevel = (num) =>{
         document.querySelector("#l3").classList.add("select");
     }
     firstHumanMove_3();
-    reset_board();
+    if(order==3){
+      reset_board_3();
+    }
+    else{
+      reset_board_4();
+    }
 };
-//reset board
-const reset_board = () => {
-  if(order==3){
+
+//Resets board when settings are changed
+const reset_board_3 = () => {
+  
   threeboard = ["", "", "", "", "", "", "", "", ""];
   board_full = false;
-  move = 1;
+  turn = 1;
   winner.classList.remove("playerWin");
   winner.classList.remove("computerWin");
   winner.classList.remove("draw");
   winner.innerText = "";
-  render_board_3();}
-  else if(order==4){
+  //add here
+  if(heuristic==1)
+  {
+    n=3;
+	  human_board=0;
+	  computer_board=0;
+	  board=[['','',''],['','',''],['','','']];
+	  depth=0;
+	  killerMoves=[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]];
+	  efficiency = [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]];
+
+  }
+  render_board_3();};
+
+  const reset_board_4 = () => {
+  
     fourboard = ["", "", "", "","", "", "", "","", "", "", "","", "", "", ""];
   board_full = false;
+  turn = 1;
   winner.classList.remove("playerWin");
   winner.classList.remove("computerWin");
   winner.classList.remove("draw");
   winner.innerText = "";
-  render_board_4();
+  if(heuristic==1)
+  {
+    n=4;
+	  human_board=0;
+	  computer_board=0;
+	  board=[['','','',''],['','','',''],['','','',''],['','','','']];
+	  depth=0;
+	killerMoves=[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]];
+	efficiency = [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]];
+
   }
+  render_board_4();
+  
 };
+
+//To refresh the Tic Tac Toe board
 const clear_board = () => {
   if(order==3){
   threeboard = ["", "", "", "", "", "", "", "", ""];
   board_full = false;
-  move = 1;
+  turn = 1;
   player = 'X';
   computer = 'O';
   document.querySelector("#firstmove").classList.add('select');
@@ -866,6 +1490,7 @@ const clear_board = () => {
   else if(order==4){
     fourboard = ["", "", "", "","", "", "", "","", "", "", "","", "", "", ""];
   board_full = false;
+  turn = 1;
   player = 'X';
   computer = 'O';
   document.querySelector("#firstmove").classList.add('select');
