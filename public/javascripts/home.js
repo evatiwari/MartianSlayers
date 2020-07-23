@@ -30,6 +30,14 @@ let fourboard = ["", "", "", "","", "", "", "","", "", "", "","", "", "", ""];
 const board_container = document.querySelector("#board");
 //contains the winner section
 const winner_statement = document.getElementById("winner");
+//contains the divs for the settings, appropriate options will show up when necessary
+const player_container = document.querySelector("#player");
+player_container.innerHTML="";
+const difficulty_container = document.querySelector("#difficulty");
+difficulty_container.innerHTML="";
+const heuristics_container = document.querySelector("#heuristics");
+heuristics_container.innerHTML="";
+//checks if board is complete
 check_board_complete = () => {
   let flag = true;
   if(order==3){
@@ -262,6 +270,9 @@ const twoHumanPlayer = () => {
     vsHuman = 1;
     document.querySelector('#human').classList.add("select");
     document.querySelector('#martian').classList.remove("select");
+    player_container.innerHTML="";
+    heuristics_container.innerHTML="";
+    difficulty_container.innerHTML="";
     if(order==3){
       reset_board_3();
     }
@@ -273,6 +284,10 @@ const oneHumanPlayer = () => {
     vsHuman = 0;
     document.querySelector('#martian').classList.add("select");
     document.querySelector('#human').classList.remove("select");
+    
+    /*if(isMinimax==1){
+      difficulty_container.innerHTML();
+    }*/
     if(order==3){
       reset_board_3();
     }
@@ -280,6 +295,19 @@ const oneHumanPlayer = () => {
       reset_board_4();
     }
 };
+//fills inner html on the basis of game settings
+const createMoreSettings=()=>{
+  heuristics_container.innerHTML+='<label>Heuristics</label></br>';
+    heuristics_container.innerHTML+='<button id="algo1" onclick="chooseAlgo(0)">Minimax</button>';
+    heuristics_container.innerHTML+='<button id="algo2" onclick="chooseAlgo(1)">Killer</button>';
+    heuristics_container.innerHTML+='<button id="algo3" onclick="chooseAlgo(2)">R L</button><br/><br/>';
+  player_container.innerHTML+='<label >Choose first player</label><br/>';
+    player_container.innerHTML+='<button id="firstmove" onclick="firstHumanMove_3()">Human</button>';
+    player_container.innerHTML+='<button id="secondmove" onclick="firstComputerMove_3()">Martian</button><br/>';
+    
+
+}
+
 //Heuristics
 const chooseAlgo = (x) => {
   firstHumanMove_3();
@@ -293,17 +321,23 @@ const chooseAlgo = (x) => {
       document.querySelector("#algo1").classList.add('select');
       document.querySelector("#algo2").classList.remove('select');
       document.querySelector("#algo3").classList.remove('select');
+      difficulty_container.innerHTML+='<label >Choose the difficulty </label><br/>';
+      difficulty_container.innerHTML+='<button id="l1" class="select" onclick="chooseLevel(1)">Easy</button>';
+      difficulty_container.innerHTML+='<button id="l2" onclick="chooseLevel(2)">Medium</button>';
+      difficulty_container.innerHTML+='<button id="l3" onclick="chooseLevel(3)">Hard</button>';
   }
   else if(x==1)
   {
       document.querySelector("#algo2").classList.add('select');
       document.querySelector("#algo1").classList.remove('select');
       document.querySelector("#algo3").classList.remove('select');
+      difficulty_container.innerHTML="";
   }
   else {
       document.querySelector("#algo3").classList.add('select');
       document.querySelector("#algo2").classList.remove('select');
       document.querySelector("#algo1").classList.remove('select');
+      difficulty_container.innerHTML="";
   }
   if(order==3){
     reset_board_3();
@@ -1417,11 +1451,14 @@ const chooseLevel = (num) =>{
     }
     firstHumanMove_3();
     if(order==3){
-      reset_board_3();
+      //reset_board_3();
+      render_board_3();
     }
     else{
-      reset_board_4();
+      //reset_board_4();
+      render_board_4();
     }
+    
 };
 
 //Resets board when settings are changed
