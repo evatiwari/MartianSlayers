@@ -15,6 +15,8 @@ var selected;
 let board_full = false;
 let order=3;  //board size
 var heuristic= 0; //Deafault algorithm Minimax
+var optionsRendered=0;
+var difficultyRendered=0;
 
 //Loading Reinforcement Learning data
 var rein_data_1 = move1();
@@ -269,6 +271,8 @@ const twoHumanPlayer = () => {
     player_container.innerHTML="";
     heuristics_container.innerHTML="";
     difficulty_container.innerHTML="";
+    difficultyRendered=0;
+    optionsRendered=0;
       reset_board();
 };
 const oneHumanPlayer = () => {
@@ -280,13 +284,16 @@ const oneHumanPlayer = () => {
 };
 //fills inner html on the basis of game settings
 const createMoreSettings=()=>{
-  heuristics_container.innerHTML+='<label>Heuristics</label></br>';
+  if(optionsRendered==0){
+    optionsRendered=1;
+    heuristics_container.innerHTML+='<label>Heuristics</label></br>';
     heuristics_container.innerHTML+='<button id="algo1" onclick="chooseAlgo(0)">Minimax</button> ';
     heuristics_container.innerHTML+='<button id="algo2" onclick="chooseAlgo(1)">Killer</button> ';
     heuristics_container.innerHTML+='<button id="algo3" onclick="chooseAlgo(2)">R L</button><br/>';
-  player_container.innerHTML+='<label >Choose first player</label><br/>';
+    player_container.innerHTML+='<label >Choose first player</label><br/>';
     player_container.innerHTML+='<button id="firstmove" onclick="firstHumanMove_3()">Human</button> ';
     player_container.innerHTML+='<button id="secondmove" onclick="firstComputerMove_3()">Martian</button><br/>';
+  }
     
 
 }
@@ -304,10 +311,13 @@ const chooseAlgo = (x) => {
       document.querySelector("#algo1").classList.add('select');
       document.querySelector("#algo2").classList.remove('select');
       document.querySelector("#algo3").classList.remove('select');
+      if(difficultyRendered==0){
+      difficultyRendered=1;
       difficulty_container.innerHTML+='<label >Choose the difficulty </label><br/>';
       difficulty_container.innerHTML+='<button id="l1" class="select" onclick="chooseLevel(1)">Easy</button> ';
       difficulty_container.innerHTML+='<button id="l2" onclick="chooseLevel(2)">Medium</button> ';
       difficulty_container.innerHTML+='<button id="l3" onclick="chooseLevel(3)">Hard</button> ';
+      }
   }
   else if(x==1)
   {
