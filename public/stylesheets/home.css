@@ -11,6 +11,9 @@ body{
 .intro{
  margin-left: 500px;
  margin-bottom: 50px;
+ margin-right:790px;
+ background-color: cornsilk;
+ border: 4px solid green;
 }
 .gameset{
   
@@ -18,6 +21,13 @@ body{
   margin-right:200px;
   margin-left:100px;
   float: left;
+  background-color: cornsilk;
+  border: 4px solid green;
+}
+.settings{
+  align-items: center;
+  justify-content: center;
+  margin: 10px 10px 10px 10px;
 }
 .container {
     align-items: center;
@@ -29,6 +39,7 @@ body{
     
     margin-left: 200px;
     float: left;
+    
   }
   .three{
     display: grid;
@@ -37,6 +48,10 @@ body{
     align-items: center;
     justify-content: center;
     grid-template-columns: auto auto auto;
+    background-color: cornsilk;
+    border: 4px solid green;
+    padding-bottom: 20px;
+    padding-top: 5px;
 
   }
   .four{
@@ -46,6 +61,8 @@ body{
     align-items:center;
     justify-content: center;
     grid-template-columns: auto auto auto auto;
+    background-color: cornsilk;
+    border: 4px solid green;
 
   }
   
