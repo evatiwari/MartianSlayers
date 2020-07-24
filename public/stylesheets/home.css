@@ -9,12 +9,21 @@ body{
   float: right;
   font-size: 40px;
 }
+.gitlink{
+  color: #eee;
+  float:left;
+  margin-top: 200px;
+  margin-left:200px;
+}
 .intro{
  margin-left: 500px;
  margin-bottom: 50px;
  margin-right:790px;
  color: #eee;
  
+}
+label{
+  color: #eee;
 }
 .gameset{
   

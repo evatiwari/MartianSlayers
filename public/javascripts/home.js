@@ -325,12 +325,15 @@ const chooseAlgo = (x) => {
       document.querySelector("#algo1").classList.remove('select');
       document.querySelector("#algo3").classList.remove('select');
       difficulty_container.innerHTML="";
+      difficultyRendered=0;
+
   }
   else {
       document.querySelector("#algo3").classList.add('select');
       document.querySelector("#algo2").classList.remove('select');
       document.querySelector("#algo1").classList.remove('select');
       difficulty_container.innerHTML="";
+      difficultyRendered=0;
   }
   
     reset_board();
@@ -422,7 +425,7 @@ const oneDtotwoD_3 = (threeboard) => {
   {
       twoD[i] = [threeboard[(i*3)],threeboard[(i*3)+1],threeboard[(i*3)+2]];
   }
-  console.log(twoD);
+  
   return twoD;
 };
 //Takes 1*16 array as input and returns 4*4 array
@@ -432,7 +435,7 @@ for(var i=0;i<4;i++)
 {
     twoD[i] = [fourboard[(i*4)],fourboard[(i*4)+1],fourboard[(i*4)+2],fourboard[(i*4)+3]];
 }
-console.log(twoD);
+
 return twoD;
 };
 
@@ -883,7 +886,7 @@ const getBestMove = (maxDepth) =>{
                 loc=i;
         }
         var answer = [bestOpt[loc][1],bestOpt[loc][2]];
-        console.log(tot);
+        
         var final_ans = (answer[0])*3 + answer[1];
         return final_ans;
     };
@@ -930,7 +933,7 @@ const getBestMove_4 = (maxDepth) =>{
               loc=i;
       }
       var answer = [bestOpt[loc][1],bestOpt[loc][2]];
-      console.log(tot);
+      
       var final_ans = (answer[0])*4 + answer[1];
       return final_ans;
   };
@@ -1157,7 +1160,6 @@ const minimax_k = (human_board,computer_board,isMax,alpha,beta,depth,maxDepth) =
 };
 
 const getBestMove_k = (human_board,computer_board,depth,level) =>{
-  console.log("In killer");
 	var maxDepth=depth+level;
 	var alpha=((-1)*Math.pow(10,n));
 	var beta= Math.pow(10,n);
@@ -1193,7 +1195,7 @@ const getHash_3 = () => {
         if (threeboard[i]=='O')
         {number = number + "-1";}
     }
-    //console.log(number);
+    
     return number;
 };
 //returns best possible next move based on previously trained model
@@ -1217,16 +1219,15 @@ const rein_move_3 = () => {
         if(avail_pos[i]!='0')
         {
             try{
-                //console.log(rein_data[avail_pos[i]]);
                 if(computer=='X'){
-                    console.log("Fisrt player computer");
+                    
                     if(rein_data_1[avail_pos[best]]<=rein_data_1[avail_pos[i]])
                     {
                         best = i;
                     }
                 }
                 else {
-                  console.log("Fisrt player human");
+                  
                     if(rein_data_2[avail_pos[best]]<=rein_data_2[avail_pos[i]])
                     {
                         best = i;
@@ -1254,7 +1255,7 @@ const getHash_4 = () => {
         if (fourboard[i]=='O')
         {number = number + "-1";}
     }
-    //console.log(number);
+    
     return number;
 };
 //returns best possible next move based on previously trained model
@@ -1278,16 +1279,16 @@ const rein_move_4 = () => {
         if(avail_pos[i]!='0')
         {
             try{
-                //console.log(rein_data[avail_pos[i]]);
+               
                 if(computer=='X'){
-                    console.log("first player computer");
+                    
                     if(rein_data_3[avail_pos[best]]<=rein_data_3[avail_pos[i]])
                     {
                         best = i;
                     }
                 }
                 else {
-                    console.log("first player human");
+                    
                     if(rein_data_4[avail_pos[best]]<=rein_data_4[avail_pos[i]])
                     {
                         best = i;
